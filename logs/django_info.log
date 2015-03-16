@@ -1,0 +1,61 @@
+[11/Mar/2015 23:47:34] WARNING [django.request:143] Not Found: / 
+
+[11/Mar/2015 23:47:35] WARNING [django.request:143] Not Found: /favicon.ico 
+
+[12/Mar/2015 23:50:20] WARNING [django.request:143] Not Found: /favicon.ico 
+
+[14/Mar/2015 15:55:14] WARNING [django.request:143] Not Found: / 
+
+[14/Mar/2015 15:55:14] WARNING [django.request:143] Not Found: /favicon.ico 
+
+[15/Mar/2015 01:52:32] WARNING [django.request:143] Not Found: /favicon.ico 
+
+[15/Mar/2015 01:54:39] WARNING [django.request:143] Not Found: / 
+
+[15/Mar/2015 14:24:00] ERROR [django.request:231] Internal Server Error: /member/login/ 
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/views.py", line 452, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Python/2.7/site-packages/rest_framework/views.py", line 449, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/ddante/Dropbox (Personal)/Projects/OGG/Code/ordergogo/member/views.py", line 21, in post
+    serializer = self.serializer_class(data=request.DATA)
+AttributeError: 'Login' object has no attribute 'serializer_class'
+[15/Mar/2015 14:25:29] ERROR [django.request:231] Internal Server Error: /member/login/ 
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/views.py", line 452, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Python/2.7/site-packages/rest_framework/views.py", line 449, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/ddante/Dropbox (Personal)/Projects/OGG/Code/ordergogo/member/views.py", line 24, in post
+    token, created =  Token.objects.get_or_create(user=serializer.object['user'])
+AttributeError: 'AuthTokenSerializer' object has no attribute 'object'
+[15/Mar/2015 14:55:27] WARNING [django.request:143] Not Found: /favicon.ico 
+
+[15/Mar/2015 15:02:36] ERROR [django.request:231] Internal Server Error: /member/login/ 
+Traceback (most recent call last):
+  File "/Library/Python/2.7/site-packages/django/core/handlers/base.py", line 111, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/decorators/csrf.py", line 57, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Library/Python/2.7/site-packages/rest_framework/views.py", line 452, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Python/2.7/site-packages/rest_framework/views.py", line 449, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/ddante/Dropbox (Personal)/Projects/OGG/Code/ordergogo/member/views.py", line 27, in post
+    token.created = datetime.datetime.utcnow()
+AttributeError: type object 'datetime.datetime' has no attribute 'datetime'
