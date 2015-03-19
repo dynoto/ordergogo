@@ -1,8 +1,15 @@
 from django.db import models
 
 # Create your models here.
+class GenericModel(models.Model):
+    class Meta:
+        abstract = True
 
-class Photo(models.Model):
+    created_at  = models.DateTimeField(auto_now_add=True)
+    updated_at  = models.DateTimeField(auto_now=True)
+
+
+class Photo(GenericModel):
     class Meta:
         abstract = True
 
@@ -12,6 +19,3 @@ class Photo(models.Model):
     caption     = models.CharField(max_length=254, default='')
     img_url     = models.URLField()
     img_thumb   = models.URLField(null=True)
-
-    created_at  = models.DateTimeField(auto_now_add=True)
-    updated_at  = models.DateTimeField(auto_now=True)

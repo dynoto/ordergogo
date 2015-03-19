@@ -17,7 +17,7 @@ class ExpiringTokenAuthentication(TokenAuthentication):
         utc_now = datetime.utcnow()
         utc_now = utc_now.replace(tzinfo=pytz.utc)
 
-        if token.created < utc_now - timedelta(seconds=10):
+        if token.created < utc_now - timedelta(hours=24):
             raise exceptions.AuthenticationFailed('Token has expired')
 
         return token.user, token
