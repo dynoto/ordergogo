@@ -1,0 +1,1 @@
+uwsgi --ini ordergogo/uwsgi.ini

@@ -18506,3 +18506,766 @@ TypeError: <Point object at 0x10b385f40> is not JSON serializable
 
 [20/Mar/2015 00:16:13] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
 
+[21/Mar/2015 17:53:46] DEBUG [django.db.backends:91] (0.007) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 17:55:18] DEBUG [django.db.backends:91] (0.004) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 17:59:16] DEBUG [django.db.backends:91] (0.004) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 18:12:43] DEBUG [django.db.backends:91] (0.112) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.003) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE TABLE "django_migrations" ("id" serial NOT NULL PRIMARY KEY, "app" varchar(255) NOT NULL, "name" varchar(255) NOT NULL, "applied" timestamp with time zone NOT NULL); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.009) CREATE TABLE "django_migrations" ("id" serial NOT NULL PRIMARY KEY, "app" varchar(255) NOT NULL, "name" varchar(255) NOT NULL, "applied" timestamp with time zone NOT NULL); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=() 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.008) CREATE TABLE "location_address" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "gps_location" geometry(POINT,4326),
+    "address_name" varchar(255) NOT NULL,
+    "address_line_1" varchar(255) NOT NULL,
+    "address_line_2" varchar(255) NOT NULL,
+    "postal_code" varchar(255) NOT NULL,
+    "created_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL,
+    "owner_id" integer NOT NULL
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.006) CREATE TABLE "order_order" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "created_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL,
+    "title" varchar(64) NOT NULL,
+    "description" text NOT NULL,
+    "remarks" text NOT NULL,
+    "is_assigned" boolean NOT NULL,
+    "is_delivered" boolean NOT NULL,
+    "assigned_to_id" integer,
+    "location_from_id" integer NOT NULL REFERENCES "location_address" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "location_to_id" integer NOT NULL REFERENCES "location_address" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "owner_id" integer NOT NULL
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.005) CREATE TABLE "order_item" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "created_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL,
+    "title" varchar(64) NOT NULL,
+    "description" text NOT NULL,
+    "price" double precision,
+    "owner_id" integer NOT NULL
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.004) CREATE TABLE "order_itemphoto" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "created_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL,
+    "caption" varchar(254) NOT NULL,
+    "img_url" varchar(200) NOT NULL,
+    "img_thumb" varchar(200),
+    "item_id" integer NOT NULL REFERENCES "order_item" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.004) CREATE TABLE "order_orderitem" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "created_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL,
+    "quantity" integer NOT NULL,
+    "remarks" text NOT NULL,
+    "order_price" double precision,
+    "order_id" integer NOT NULL REFERENCES "order_order" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "item_id" integer NOT NULL REFERENCES "order_item" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.003) CREATE TABLE "member_member_groups" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "member_id" integer NOT NULL,
+    "group_id" integer NOT NULL,
+    UNIQUE ("member_id", "group_id")
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.003) CREATE TABLE "member_member_user_permissions" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "member_id" integer NOT NULL,
+    "permission_id" integer NOT NULL,
+    UNIQUE ("member_id", "permission_id")
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.005) CREATE TABLE "member_member" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "password" varchar(128) NOT NULL,
+    "last_login" timestamp with time zone NOT NULL,
+    "is_superuser" boolean NOT NULL,
+    "username" varchar(30) NOT NULL UNIQUE,
+    "first_name" varchar(30) NOT NULL,
+    "last_name" varchar(30) NOT NULL,
+    "email" varchar(75) NOT NULL,
+    "is_staff" boolean NOT NULL,
+    "is_active" boolean NOT NULL,
+    "date_joined" timestamp with time zone NOT NULL,
+    "photo" varchar(200),
+    "created_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.002) ALTER TABLE "location_address" ADD CONSTRAINT "owner_id_refs_id_278526db" FOREIGN KEY ("owner_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "order_order" ADD CONSTRAINT "assigned_to_id_refs_id_5be946e2" FOREIGN KEY ("assigned_to_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "order_order" ADD CONSTRAINT "owner_id_refs_id_5be946e2" FOREIGN KEY ("owner_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "order_item" ADD CONSTRAINT "owner_id_refs_id_b31f0e29" FOREIGN KEY ("owner_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "member_member_groups" ADD CONSTRAINT "member_id_refs_id_b314a3c3" FOREIGN KEY ("member_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "member_member_user_permissions" ADD CONSTRAINT "member_id_refs_id_769cc7dd" FOREIGN KEY ("member_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.003) CREATE TABLE "member_company" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "created_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL,
+    "name" varchar(192) NOT NULL,
+    "description" text NOT NULL
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.004) CREATE TABLE "member_companystaff" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "created_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL,
+    "company_id" integer NOT NULL REFERENCES "member_company" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "member_id" integer NOT NULL REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.002) CREATE TABLE "corsheaders_corsmodel" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "cors" varchar(255) NOT NULL
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.005) CREATE TABLE "axes_accessattempt" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "user_agent" varchar(255) NOT NULL,
+    "ip_address" inet,
+    "username" varchar(255),
+    "trusted" boolean NOT NULL,
+    "http_accept" varchar(1025) NOT NULL,
+    "path_info" varchar(255) NOT NULL,
+    "attempt_time" timestamp with time zone NOT NULL,
+    "get_data" text NOT NULL,
+    "post_data" text NOT NULL,
+    "failures_since_start" integer CHECK ("failures_since_start" >= 0) NOT NULL
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.004) CREATE TABLE "axes_accesslog" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "user_agent" varchar(255) NOT NULL,
+    "ip_address" inet,
+    "username" varchar(255),
+    "trusted" boolean NOT NULL,
+    "http_accept" varchar(1025) NOT NULL,
+    "path_info" varchar(255) NOT NULL,
+    "attempt_time" timestamp with time zone NOT NULL,
+    "logout_time" timestamp with time zone
+)
+;; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.005) CREATE INDEX "location_address_gps_location_id" ON "location_address" USING GIST ( "gps_location" );; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "location_address_owner_id" ON "location_address" ("owner_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "order_order_assigned_to_id" ON "order_order" ("assigned_to_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "order_order_location_from_id" ON "order_order" ("location_from_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "order_order_location_to_id" ON "order_order" ("location_to_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "order_order_owner_id" ON "order_order" ("owner_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "order_item_owner_id" ON "order_item" ("owner_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "order_itemphoto_item_id" ON "order_itemphoto" ("item_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "order_orderitem_order_id" ON "order_orderitem" ("order_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "order_orderitem_item_id" ON "order_orderitem" ("item_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "member_member_groups_member_id" ON "member_member_groups" ("member_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "member_member_groups_group_id" ON "member_member_groups" ("group_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "member_member_user_permissions_member_id" ON "member_member_user_permissions" ("member_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "member_member_user_permissions_permission_id" ON "member_member_user_permissions" ("permission_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "member_member_username_like" ON "member_member" ("username" varchar_pattern_ops);; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "member_companystaff_company_id" ON "member_companystaff" ("company_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "member_companystaff_member_id" ON "member_companystaff" ("member_id");; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL IMMEDIATE; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SET CONSTRAINTS ALL DEFERRED; args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.003) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE TABLE "django_content_type" ("id" serial NOT NULL PRIMARY KEY, "name" varchar(100) NOT NULL, "app_label" varchar(100) NOT NULL, "model" varchar(100) NOT NULL); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.005) CREATE TABLE "django_content_type" ("id" serial NOT NULL PRIMARY KEY, "name" varchar(100) NOT NULL, "app_label" varchar(100) NOT NULL, "model" varchar(100) NOT NULL); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] ALTER TABLE "django_content_type" ADD CONSTRAINT "django_content_type_app_label_45f3b1d93ec8c61c_uniq" UNIQUE ("app_label", "model"); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.002) ALTER TABLE "django_content_type" ADD CONSTRAINT "django_content_type_app_label_45f3b1d93ec8c61c_uniq" UNIQUE ("app_label", "model"); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) INSERT INTO "django_migrations" ("app", "name", "applied") VALUES ('contenttypes', '0001_initial', '2015-03-21 10:12:44.254571+00:00') RETURNING "django_migrations"."id"; args=('contenttypes', u'0001_initial', u'2015-03-21 10:12:44.254571+00:00') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE TABLE "django_admin_log" ("id" serial NOT NULL PRIMARY KEY, "action_time" timestamp with time zone NOT NULL, "object_id" text NULL, "object_repr" varchar(200) NOT NULL, "action_flag" smallint NOT NULL CHECK ("action_flag" >= 0), "change_message" text NOT NULL, "content_type_id" integer NULL, "user_id" integer NOT NULL); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.005) CREATE TABLE "django_admin_log" ("id" serial NOT NULL PRIMARY KEY, "action_time" timestamp with time zone NOT NULL, "object_id" text NULL, "object_repr" varchar(200) NOT NULL, "action_flag" smallint NOT NULL CHECK ("action_flag" >= 0), "change_message" text NOT NULL, "content_type_id" integer NULL, "user_id" integer NOT NULL); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] ALTER TABLE "django_admin_log" ADD CONSTRAINT "djan_content_type_id_697914295151027a_fk_django_content_type_id" FOREIGN KEY ("content_type_id") REFERENCES "django_content_type" ("id") DEFERRABLE INITIALLY DEFERRED; (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.002) ALTER TABLE "django_admin_log" ADD CONSTRAINT "djan_content_type_id_697914295151027a_fk_django_content_type_id" FOREIGN KEY ("content_type_id") REFERENCES "django_content_type" ("id") DEFERRABLE INITIALLY DEFERRED; args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] ALTER TABLE "django_admin_log" ADD CONSTRAINT "django_admin_log_user_id_52fdd58701c5f563_fk_member_member_id" FOREIGN KEY ("user_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED; (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "django_admin_log" ADD CONSTRAINT "django_admin_log_user_id_52fdd58701c5f563_fk_member_member_id" FOREIGN KEY ("user_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED; args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "django_admin_log_417f1b1c" ON "django_admin_log" ("content_type_id"); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "django_admin_log_417f1b1c" ON "django_admin_log" ("content_type_id"); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "django_admin_log_e8701ad4" ON "django_admin_log" ("user_id"); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "django_admin_log_e8701ad4" ON "django_admin_log" ("user_id"); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_migrations" ("app", "name", "applied") VALUES ('admin', '0001_initial', '2015-03-21 10:12:44.313621+00:00') RETURNING "django_migrations"."id"; args=('admin', u'0001_initial', u'2015-03-21 10:12:44.313621+00:00') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE TABLE "auth_permission" ("id" serial NOT NULL PRIMARY KEY, "name" varchar(50) NOT NULL, "content_type_id" integer NOT NULL, "codename" varchar(100) NOT NULL, UNIQUE ("content_type_id", "codename")); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.004) CREATE TABLE "auth_permission" ("id" serial NOT NULL PRIMARY KEY, "name" varchar(50) NOT NULL, "content_type_id" integer NOT NULL, "codename" varchar(100) NOT NULL, UNIQUE ("content_type_id", "codename")); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE TABLE "auth_group" ("id" serial NOT NULL PRIMARY KEY, "name" varchar(80) NOT NULL UNIQUE); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.003) CREATE TABLE "auth_group" ("id" serial NOT NULL PRIMARY KEY, "name" varchar(80) NOT NULL UNIQUE); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE TABLE "auth_group_permissions" ("id" serial NOT NULL PRIMARY KEY, "group_id" integer NOT NULL, "permission_id" integer NOT NULL, UNIQUE ("group_id", "permission_id")); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.004) CREATE TABLE "auth_group_permissions" ("id" serial NOT NULL PRIMARY KEY, "group_id" integer NOT NULL, "permission_id" integer NOT NULL, UNIQUE ("group_id", "permission_id")); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] ALTER TABLE "auth_permission" ADD CONSTRAINT "auth_content_type_id_508cf46651277a81_fk_django_content_type_id" FOREIGN KEY ("content_type_id") REFERENCES "django_content_type" ("id") DEFERRABLE INITIALLY DEFERRED; (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.002) ALTER TABLE "auth_permission" ADD CONSTRAINT "auth_content_type_id_508cf46651277a81_fk_django_content_type_id" FOREIGN KEY ("content_type_id") REFERENCES "django_content_type" ("id") DEFERRABLE INITIALLY DEFERRED; args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "auth_permission_417f1b1c" ON "auth_permission" ("content_type_id"); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "auth_permission_417f1b1c" ON "auth_permission" ("content_type_id"); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "auth_group_name_253ae2a6331666e8_like" ON "auth_group" ("name" varchar_pattern_ops); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "auth_group_name_253ae2a6331666e8_like" ON "auth_group" ("name" varchar_pattern_ops); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] ALTER TABLE "auth_group_permissions" ADD CONSTRAINT "auth_group_permissio_group_id_689710a9a73b7457_fk_auth_group_id" FOREIGN KEY ("group_id") REFERENCES "auth_group" ("id") DEFERRABLE INITIALLY DEFERRED; (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "auth_group_permissions" ADD CONSTRAINT "auth_group_permissio_group_id_689710a9a73b7457_fk_auth_group_id" FOREIGN KEY ("group_id") REFERENCES "auth_group" ("id") DEFERRABLE INITIALLY DEFERRED; args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] ALTER TABLE "auth_group_permissions" ADD CONSTRAINT "auth_group_permission_id_1f49ccbbdc69d2fc_fk_auth_permission_id" FOREIGN KEY ("permission_id") REFERENCES "auth_permission" ("id") DEFERRABLE INITIALLY DEFERRED; (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "auth_group_permissions" ADD CONSTRAINT "auth_group_permission_id_1f49ccbbdc69d2fc_fk_auth_permission_id" FOREIGN KEY ("permission_id") REFERENCES "auth_permission" ("id") DEFERRABLE INITIALLY DEFERRED; args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "auth_group_permissions_0e939a4f" ON "auth_group_permissions" ("group_id"); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "auth_group_permissions_0e939a4f" ON "auth_group_permissions" ("group_id"); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "auth_group_permissions_8373b171" ON "auth_group_permissions" ("permission_id"); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "auth_group_permissions_8373b171" ON "auth_group_permissions" ("permission_id"); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_migrations" ("app", "name", "applied") VALUES ('auth', '0001_initial', '2015-03-21 10:12:44.420921+00:00') RETURNING "django_migrations"."id"; args=('auth', u'0001_initial', u'2015-03-21 10:12:44.420921+00:00') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE TABLE "authtoken_token" ("key" varchar(40) NOT NULL PRIMARY KEY, "created" timestamp with time zone NOT NULL, "user_id" integer NOT NULL UNIQUE); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.002) CREATE TABLE "authtoken_token" ("key" varchar(40) NOT NULL PRIMARY KEY, "created" timestamp with time zone NOT NULL, "user_id" integer NOT NULL UNIQUE); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] ALTER TABLE "authtoken_token" ADD CONSTRAINT "authtoken_token_user_id_1d10c57f535fb363_fk_member_member_id" FOREIGN KEY ("user_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED; (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) ALTER TABLE "authtoken_token" ADD CONSTRAINT "authtoken_token_user_id_1d10c57f535fb363_fk_member_member_id" FOREIGN KEY ("user_id") REFERENCES "member_member" ("id") DEFERRABLE INITIALLY DEFERRED; args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "authtoken_token_key_7222ec672cd32dcd_like" ON "authtoken_token" ("key" varchar_pattern_ops); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "authtoken_token_key_7222ec672cd32dcd_like" ON "authtoken_token" ("key" varchar_pattern_ops); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_migrations" ("app", "name", "applied") VALUES ('authtoken', '0001_initial', '2015-03-21 10:12:44.469136+00:00') RETURNING "django_migrations"."id"; args=('authtoken', u'0001_initial', u'2015-03-21 10:12:44.469136+00:00') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE TABLE "django_session" ("session_key" varchar(40) NOT NULL PRIMARY KEY, "session_data" text NOT NULL, "expire_date" timestamp with time zone NOT NULL); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.003) CREATE TABLE "django_session" ("session_key" varchar(40) NOT NULL PRIMARY KEY, "session_data" text NOT NULL, "expire_date" timestamp with time zone NOT NULL); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "django_session_de54fa62" ON "django_session" ("expire_date"); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "django_session_de54fa62" ON "django_session" ("expire_date"); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends.schema:94] CREATE INDEX "django_session_session_key_461cfeaa630ca218_like" ON "django_session" ("session_key" varchar_pattern_ops); (params []) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) CREATE INDEX "django_session_session_key_461cfeaa630ca218_like" ON "django_session" ("session_key" varchar_pattern_ops); args=[] 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) 
+            SELECT c.relname
+            FROM pg_catalog.pg_class c
+            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relkind IN ('r', 'v', '')
+                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
+                AND pg_catalog.pg_table_is_visible(c.oid); args=None 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_migrations" ("app", "name", "applied") VALUES ('sessions', '0001_initial', '2015-03-21 10:12:44.518834+00:00') RETURNING "django_migrations"."id"; args=('sessions', u'0001_initial', u'2015-03-21 10:12:44.518834+00:00') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'logentry' AND "django_content_type"."app_label" = 'admin') LIMIT 21; args=('logentry', 'admin') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('log entry', 'admin', 'logentry') RETURNING "django_content_type"."id"; args=(u'log entry', 'admin', 'logentry') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (1) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(1,) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add log entry', 1, 'add_logentry'), ('Can change log entry', 1, 'change_logentry'), ('Can delete log entry', 1, 'delete_logentry'); args=(u'Can add log entry', 1, u'add_logentry', u'Can change log entry', 1, u'change_logentry', u'Can delete log entry', 1, u'delete_logentry') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'admin' ORDER BY "django_content_type"."name" ASC; args=('admin',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'permission' AND "django_content_type"."app_label" = 'auth') LIMIT 21; args=('permission', 'auth') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('permission', 'auth', 'permission') RETURNING "django_content_type"."id"; args=(u'permission', 'auth', 'permission') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'group' AND "django_content_type"."app_label" = 'auth') LIMIT 21; args=('group', 'auth') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('group', 'auth', 'group') RETURNING "django_content_type"."id"; args=(u'group', 'auth', 'group') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (2, 3) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(2, 3) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add permission', 2, 'add_permission'), ('Can change permission', 2, 'change_permission'), ('Can delete permission', 2, 'delete_permission'), ('Can add group', 3, 'add_group'), ('Can change group', 3, 'change_group'), ('Can delete group', 3, 'delete_group'); args=(u'Can add permission', 2, u'add_permission', u'Can change permission', 2, u'change_permission', u'Can delete permission', 2, u'delete_permission', u'Can add group', 3, u'add_group', u'Can change group', 3, u'change_group', u'Can delete group', 3, u'delete_group') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'auth' ORDER BY "django_content_type"."name" ASC; args=('auth',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'contenttype' AND "django_content_type"."app_label" = 'contenttypes') LIMIT 21; args=('contenttype', 'contenttypes') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('content type', 'contenttypes', 'contenttype') RETURNING "django_content_type"."id"; args=(u'content type', 'contenttypes', 'contenttype') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (4) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(4,) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add content type', 4, 'add_contenttype'), ('Can change content type', 4, 'change_contenttype'), ('Can delete content type', 4, 'delete_contenttype'); args=(u'Can add content type', 4, u'add_contenttype', u'Can change content type', 4, u'change_contenttype', u'Can delete content type', 4, u'delete_contenttype') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'contenttypes' ORDER BY "django_content_type"."name" ASC; args=('contenttypes',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'session' AND "django_content_type"."app_label" = 'sessions') LIMIT 21; args=('session', 'sessions') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('session', 'sessions', 'session') RETURNING "django_content_type"."id"; args=(u'session', 'sessions', 'session') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (5) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(5,) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add session', 5, 'add_session'), ('Can change session', 5, 'change_session'), ('Can delete session', 5, 'delete_session'); args=(u'Can add session', 5, u'add_session', u'Can change session', 5, u'change_session', u'Can delete session', 5, u'delete_session') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'sessions' ORDER BY "django_content_type"."name" ASC; args=('sessions',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'postgisgeometrycolumns' AND "django_content_type"."app_label" = 'gis') LIMIT 21; args=('postgisgeometrycolumns', 'gis') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('post gis geometry columns', 'gis', 'postgisgeometrycolumns') RETURNING "django_content_type"."id"; args=(u'post gis geometry columns', 'gis', 'postgisgeometrycolumns') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'postgisspatialrefsys' AND "django_content_type"."app_label" = 'gis') LIMIT 21; args=('postgisspatialrefsys', 'gis') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('post gis spatial ref sys', 'gis', 'postgisspatialrefsys') RETURNING "django_content_type"."id"; args=(u'post gis spatial ref sys', 'gis', 'postgisspatialrefsys') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (6, 7) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(6, 7) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add post gis geometry columns', 6, 'add_postgisgeometrycolumns'), ('Can change post gis geometry columns', 6, 'change_postgisgeometrycolumns'), ('Can delete post gis geometry columns', 6, 'delete_postgisgeometrycolumns'), ('Can add post gis spatial ref sys', 7, 'add_postgisspatialrefsys'), ('Can change post gis spatial ref sys', 7, 'change_postgisspatialrefsys'), ('Can delete post gis spatial ref sys', 7, 'delete_postgisspatialrefsys'); args=(u'Can add post gis geometry columns', 6, u'add_postgisgeometrycolumns', u'Can change post gis geometry columns', 6, u'change_postgisgeometrycolumns', u'Can delete post gis geometry columns', 6, u'delete_postgisgeometrycolumns', u'Can add post gis spatial ref sys', 7, u'add_postgisspatialrefsys', u'Can change post gis spatial ref sys', 7, u'change_postgisspatialrefsys', u'Can delete post gis spatial ref sys', 7, u'delete_postgisspatialrefsys') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'gis' ORDER BY "django_content_type"."name" ASC; args=('gis',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'token' AND "django_content_type"."app_label" = 'authtoken') LIMIT 21; args=('token', 'authtoken') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('token', 'authtoken', 'token') RETURNING "django_content_type"."id"; args=(u'token', 'authtoken', 'token') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (8) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(8,) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add token', 8, 'add_token'), ('Can change token', 8, 'change_token'), ('Can delete token', 8, 'delete_token'); args=(u'Can add token', 8, u'add_token', u'Can change token', 8, u'change_token', u'Can delete token', 8, u'delete_token') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'authtoken' ORDER BY "django_content_type"."name" ASC; args=('authtoken',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'address' AND "django_content_type"."app_label" = 'location') LIMIT 21; args=('address', 'location') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('Address', 'location', 'address') RETURNING "django_content_type"."id"; args=(u'Address', 'location', 'address') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (9) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(9,) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add Address', 9, 'add_address'), ('Can change Address', 9, 'change_address'), ('Can delete Address', 9, 'delete_address'); args=(u'Can add Address', 9, u'add_address', u'Can change Address', 9, u'change_address', u'Can delete Address', 9, u'delete_address') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'location' ORDER BY "django_content_type"."name" ASC; args=('location',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'order' AND "django_content_type"."app_label" = 'order') LIMIT 21; args=('order', 'order') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('order', 'order', 'order') RETURNING "django_content_type"."id"; args=(u'order', 'order', 'order') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'item' AND "django_content_type"."app_label" = 'order') LIMIT 21; args=('item', 'order') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('item', 'order', 'item') RETURNING "django_content_type"."id"; args=(u'item', 'order', 'item') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'itemphoto' AND "django_content_type"."app_label" = 'order') LIMIT 21; args=('itemphoto', 'order') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('item photo', 'order', 'itemphoto') RETURNING "django_content_type"."id"; args=(u'item photo', 'order', 'itemphoto') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'orderitem' AND "django_content_type"."app_label" = 'order') LIMIT 21; args=('orderitem', 'order') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('order item', 'order', 'orderitem') RETURNING "django_content_type"."id"; args=(u'order item', 'order', 'orderitem') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (10, 11, 12, 13) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(10, 11, 12, 13) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add order', 10, 'add_order'), ('Can change order', 10, 'change_order'), ('Can delete order', 10, 'delete_order'), ('Can add item', 11, 'add_item'), ('Can change item', 11, 'change_item'), ('Can delete item', 11, 'delete_item'), ('Can add item photo', 12, 'add_itemphoto'), ('Can change item photo', 12, 'change_itemphoto'), ('Can delete item photo', 12, 'delete_itemphoto'), ('Can add order item', 13, 'add_orderitem'), ('Can change order item', 13, 'change_orderitem'), ('Can delete order item', 13, 'delete_orderitem'); args=(u'Can add order', 10, u'add_order', u'Can change order', 10, u'change_order', u'Can delete order', 10, u'delete_order', u'Can add item', 11, u'add_item', u'Can change item', 11, u'change_item', u'Can delete item', 11, u'delete_item', u'Can add item photo', 12, u'add_itemphoto', u'Can change item photo', 12, u'change_itemphoto', u'Can delete item photo', 12, u'delete_itemphoto', u'Can add order item', 13, u'add_orderitem', u'Can change order item', 13, u'change_orderitem', u'Can delete order item', 13, u'delete_orderitem') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'order' ORDER BY "django_content_type"."name" ASC; args=('order',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'member' AND "django_content_type"."app_label" = 'member') LIMIT 21; args=('member', 'member') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('Member', 'member', 'member') RETURNING "django_content_type"."id"; args=(u'Member', 'member', 'member') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'company' AND "django_content_type"."app_label" = 'member') LIMIT 21; args=('company', 'member') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('Company', 'member', 'company') RETURNING "django_content_type"."id"; args=(u'Company', 'member', 'company') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'companystaff' AND "django_content_type"."app_label" = 'member') LIMIT 21; args=('companystaff', 'member') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('Company', 'member', 'companystaff') RETURNING "django_content_type"."id"; args=(u'Company', 'member', 'companystaff') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (16, 14, 15) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(16, 14, 15) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add Member', 14, 'add_member'), ('Can change Member', 14, 'change_member'), ('Can delete Member', 14, 'delete_member'), ('Can add Company', 15, 'add_company'), ('Can change Company', 15, 'change_company'), ('Can delete Company', 15, 'delete_company'), ('Can add Company', 16, 'add_companystaff'), ('Can change Company', 16, 'change_companystaff'), ('Can delete Company', 16, 'delete_companystaff'); args=(u'Can add Member', 14, u'add_member', u'Can change Member', 14, u'change_member', u'Can delete Member', 14, u'delete_member', u'Can add Company', 15, u'add_company', u'Can change Company', 15, u'change_company', u'Can delete Company', 15, u'delete_company', u'Can add Company', 16, u'add_companystaff', u'Can change Company', 16, u'change_companystaff', u'Can delete Company', 16, u'delete_companystaff') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'member' ORDER BY "django_content_type"."name" ASC; args=('member',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'corsmodel' AND "django_content_type"."app_label" = 'corsheaders') LIMIT 21; args=('corsmodel', 'corsheaders') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('cors model', 'corsheaders', 'corsmodel') RETURNING "django_content_type"."id"; args=(u'cors model', 'corsheaders', 'corsmodel') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (17) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(17,) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add cors model', 17, 'add_corsmodel'), ('Can change cors model', 17, 'change_corsmodel'), ('Can delete cors model', 17, 'delete_corsmodel'); args=(u'Can add cors model', 17, u'add_corsmodel', u'Can change cors model', 17, u'change_corsmodel', u'Can delete cors model', 17, u'delete_corsmodel') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'corsheaders' ORDER BY "django_content_type"."name" ASC; args=('corsheaders',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'accessattempt' AND "django_content_type"."app_label" = 'axes') LIMIT 21; args=('accessattempt', 'axes') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('access attempt', 'axes', 'accessattempt') RETURNING "django_content_type"."id"; args=(u'access attempt', 'axes', 'accessattempt') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE ("django_content_type"."model" = 'accesslog' AND "django_content_type"."app_label" = 'axes') LIMIT 21; args=('accesslog', 'axes') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_content_type" ("name", "app_label", "model") VALUES ('access log', 'axes', 'accesslog') RETURNING "django_content_type"."id"; args=(u'access log', 'axes', 'accesslog') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.001) SELECT "auth_permission"."content_type_id", "auth_permission"."codename" FROM "auth_permission" INNER JOIN "django_content_type" ON ( "auth_permission"."content_type_id" = "django_content_type"."id" ) WHERE "auth_permission"."content_type_id" IN (18, 19) ORDER BY "django_content_type"."app_label" ASC, "django_content_type"."model" ASC, "auth_permission"."codename" ASC; args=(18, 19) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) INSERT INTO "auth_permission" ("name", "content_type_id", "codename") VALUES ('Can add access attempt', 18, 'add_accessattempt'), ('Can change access attempt', 18, 'change_accessattempt'), ('Can delete access attempt', 18, 'delete_accessattempt'), ('Can add access log', 19, 'add_accesslog'), ('Can change access log', 19, 'change_accesslog'), ('Can delete access log', 19, 'delete_accesslog'); args=(u'Can add access attempt', 18, u'add_accessattempt', u'Can change access attempt', 18, u'change_accessattempt', u'Can delete access attempt', 18, u'delete_accessattempt', u'Can add access log', 19, u'add_accesslog', u'Can change access log', 19, u'change_accesslog', u'Can delete access log', 19, u'delete_accesslog') 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_content_type" WHERE "django_content_type"."app_label" = 'axes' ORDER BY "django_content_type"."name" ASC; args=('axes',) 
+
+[21/Mar/2015 18:12:44] DEBUG [django.db.backends:91] (0.000) SELECT (1) AS "a" FROM "member_member" LIMIT 1; args=() 
+
+[21/Mar/2015 18:12:47] DEBUG [django.db.backends:91] (0.001) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."username" = 'admin' LIMIT 21; args=('admin',) 
+
+[21/Mar/2015 18:12:49] DEBUG [django.db.backends:91] (0.001) INSERT INTO "member_member" ("password", "last_login", "is_superuser", "username", "first_name", "last_name", "email", "is_staff", "is_active", "date_joined", "photo", "created_at", "updated_at") VALUES ('pbkdf2_sha256$15000$JgvRsb6RWaJt$GKntrBVv8tivZgvg/XvQNkBm7ZG7Hte4YJEhJz7r5sM=', '2015-03-21 10:12:49.462441+00:00', true, 'admin', '', '', '', true, true, '2015-03-21 10:12:49.462441+00:00', NULL, '2015-03-21 10:12:49.529201+00:00', '2015-03-21 10:12:49.529219+00:00') RETURNING "member_member"."id"; args=(u'pbkdf2_sha256$15000$JgvRsb6RWaJt$GKntrBVv8tivZgvg/XvQNkBm7ZG7Hte4YJEhJz7r5sM=', u'2015-03-21 10:12:49.462441+00:00', True, 'admin', u'', u'', u'', True, True, u'2015-03-21 10:12:49.462441+00:00', None, u'2015-03-21 10:12:49.529201+00:00', u'2015-03-21 10:12:49.529219+00:00') 
+
+[21/Mar/2015 23:06:07] DEBUG [django.db.backends:91] (0.008) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 23:07:45] DEBUG [django.db.backends:91] (0.004) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 23:08:07] DEBUG [django.db.backends:91] (0.004) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /static/suit/bootstrap/css/bootstrap.min.css 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /static/suit/css/suit.css 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /static/suit/js/jquery-1.8.3.min.js 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /static/suit/bootstrap/js/bootstrap.min.js 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /static/suit/js/suit.js 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /static/debug_toolbar/css/toolbar.css 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /static/debug_toolbar/js/toolbar.js 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /static/debug_toolbar/img/ajax-loader.gif 
+
+[21/Mar/2015 23:08:09] WARNING [django.request:143] Not Found: /favicon.ico 
+
+[21/Mar/2015 23:09:26] DEBUG [django.db.backends:91] (0.004) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."username" = 'admin' LIMIT 21; args=(u'admin',) 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT (1) AS "a" FROM "django_session" WHERE "django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' LIMIT 1; args=(u'euu074g7rwmb4mrec1pfq1t2z2j9jj1m',) 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.004) INSERT INTO "django_session" ("session_key", "session_data", "expire_date") VALUES ('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', 'N2M4ZmM4NWRiOTE5NWJjZjJjMzI0ZWJkYTNlZDZmNmQyMWQ4MDE0NDp7fQ==', '2015-04-04 15:09:27.062760+00:00'); args=(u'euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'N2M4ZmM4NWRiOTE5NWJjZjJjMzI0ZWJkYTNlZDZmNmQyMWQ4MDE0NDp7fQ==', u'2015-04-04 15:09:27.062760+00:00') 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.001) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE "django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' LIMIT 21; args=(u'euu074g7rwmb4mrec1pfq1t2z2j9jj1m',) 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.001) DELETE FROM "django_session" WHERE "django_session"."session_key" IN ('euu074g7rwmb4mrec1pfq1t2z2j9jj1m'); args=(u'euu074g7rwmb4mrec1pfq1t2z2j9jj1m',) 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.001) UPDATE "member_member" SET "last_login" = '2015-03-21 15:09:27.187810+00:00' WHERE "member_member"."id" = 1; args=(u'2015-03-21 15:09:27.187810+00:00', 1) 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.001) UPDATE "django_session" SET "session_data" = 'ODVmNWZkNTA4OTQzZDc5ZGY1MzMzOGJhMDI5N2I3YTAyMTcyNjkwNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjU0MWRlYjhlM2QxYjRlYjZhOTc4Zjc2MzQ4YjFkYzQ5YTA1ZTRhYTEiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjF9', "expire_date" = '2015-04-04 15:09:27.195445+00:00' WHERE "django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m'; args=(u'ODVmNWZkNTA4OTQzZDc5ZGY1MzMzOGJhMDI5N2I3YTAyMTcyNjkwNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjU0MWRlYjhlM2QxYjRlYjZhOTc4Zjc2MzQ4YjFkYzQ5YTA1ZTRhYTEiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjF9', u'2015-04-04 15:09:27.195445+00:00', u'euu074g7rwmb4mrec1pfq1t2z2j9jj1m') 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_session" ("session_key", "session_data", "expire_date") VALUES ('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', 'ODVmNWZkNTA4OTQzZDc5ZGY1MzMzOGJhMDI5N2I3YTAyMTcyNjkwNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjU0MWRlYjhlM2QxYjRlYjZhOTc4Zjc2MzQ4YjFkYzQ5YTA1ZTRhYTEiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjF9', '2015-04-04 15:09:27.195445+00:00'); args=(u'euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'ODVmNWZkNTA4OTQzZDc5ZGY1MzMzOGJhMDI5N2I3YTAyMTcyNjkwNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjU0MWRlYjhlM2QxYjRlYjZhOTc4Zjc2MzQ4YjFkYzQ5YTA1ZTRhYTEiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjF9', u'2015-04-04 15:09:27.195445+00:00') 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.234804+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.234804+00:00') 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.001) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."id" = 1 LIMIT 21; args=(1,) 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.004) SELECT "django_admin_log"."id", "django_admin_log"."action_time", "django_admin_log"."user_id", "django_admin_log"."content_type_id", "django_admin_log"."object_id", "django_admin_log"."object_repr", "django_admin_log"."action_flag", "django_admin_log"."change_message", "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at", "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_admin_log" INNER JOIN "member_member" ON ( "django_admin_log"."user_id" = "member_member"."id" ) LEFT OUTER JOIN "django_content_type" ON ( "django_admin_log"."content_type_id" = "django_content_type"."id" ) WHERE "django_admin_log"."user_id" = 1 ORDER BY "django_admin_log"."action_time" DESC LIMIT 10; args=(1,) 
+
+[21/Mar/2015 23:09:27] WARNING [django.request:143] Not Found: /static/suit/bootstrap/css/bootstrap.min.css 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.487847+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.487847+00:00') 
+
+[21/Mar/2015 23:09:27] WARNING [django.request:143] Not Found: /static/suit/css/suit.css 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.559200+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.559200+00:00') 
+
+[21/Mar/2015 23:09:27] WARNING [django.request:143] Not Found: /static/suit/js/jquery-1.8.3.min.js 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.627318+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.627318+00:00') 
+
+[21/Mar/2015 23:09:27] WARNING [django.request:143] Not Found: /static/suit/bootstrap/js/bootstrap.min.js 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.701870+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.701870+00:00') 
+
+[21/Mar/2015 23:09:27] WARNING [django.request:143] Not Found: /static/suit/js/suit.js 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.778462+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.778462+00:00') 
+
+[21/Mar/2015 23:09:27] WARNING [django.request:143] Not Found: /static/debug_toolbar/css/toolbar.css 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.847921+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.847921+00:00') 
+
+[21/Mar/2015 23:09:27] WARNING [django.request:143] Not Found: /static/debug_toolbar/js/toolbar.js 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.919144+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.919144+00:00') 
+
+[21/Mar/2015 23:09:27] WARNING [django.request:143] Not Found: /static/debug_toolbar/img/ajax-loader.gif 
+
+[21/Mar/2015 23:09:27] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 15:09:27.985120+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 15:09:27.985120+00:00') 
+
+[21/Mar/2015 23:40:08] DEBUG [django.db.backends:91] (0.006) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 23:40:39] DEBUG [django.db.backends:91] (0.005) SELECT postgis_lib_version(); args=None 
+
+[21/Mar/2015 23:40:47] DEBUG [django.db.backends:91] (0.005) SELECT postgis_lib_version(); args=None 
+
+[22/Mar/2015 00:02:47] DEBUG [django.db.backends:91] (0.006) SELECT postgis_lib_version(); args=None 
+
+[22/Mar/2015 00:05:59] DEBUG [django.db.backends:91] (0.004) SELECT postgis_lib_version(); args=None 
+
+[22/Mar/2015 00:06:53] DEBUG [django.db.backends:91] (0.004) SELECT postgis_lib_version(); args=None 
+
+[22/Mar/2015 00:09:55] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 16:09:55.813693+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 16:09:55.813693+00:00') 
+
+[22/Mar/2015 00:09:55] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 16:09:55.910927+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 16:09:55.910927+00:00') 
+
+[22/Mar/2015 00:09:55] DEBUG [django.db.backends:91] (0.001) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."id" = 1 LIMIT 21; args=(1,) 
+
+[22/Mar/2015 00:09:56] DEBUG [django.db.backends:91] (0.002) SELECT "django_admin_log"."id", "django_admin_log"."action_time", "django_admin_log"."user_id", "django_admin_log"."content_type_id", "django_admin_log"."object_id", "django_admin_log"."object_repr", "django_admin_log"."action_flag", "django_admin_log"."change_message", "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at", "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_admin_log" INNER JOIN "member_member" ON ( "django_admin_log"."user_id" = "member_member"."id" ) LEFT OUTER JOIN "django_content_type" ON ( "django_admin_log"."content_type_id" = "django_content_type"."id" ) WHERE "django_admin_log"."user_id" = 1 ORDER BY "django_admin_log"."action_time" DESC LIMIT 10; args=(1,) 
+
+[22/Mar/2015 00:09:56] WARNING [django.request:143] Not Found: /favicon.ico 
+
+[22/Mar/2015 00:09:56] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 16:09:56.745557+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 16:09:56.745557+00:00') 
+
+[22/Mar/2015 00:10:00] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' AND "django_session"."expire_date" > '2015-03-21 16:10:00.443582+00:00') LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m', u'2015-03-21 16:10:00.443582+00:00') 
+
+[22/Mar/2015 00:10:00] DEBUG [django.db.backends:91] (0.002) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."id" = 1 LIMIT 21; args=(1,) 
+
+[22/Mar/2015 00:10:00] DEBUG [django.db.backends:91] (0.000) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE "django_session"."session_key" = 'euu074g7rwmb4mrec1pfq1t2z2j9jj1m' LIMIT 21; args=('euu074g7rwmb4mrec1pfq1t2z2j9jj1m',) 
+
+[22/Mar/2015 00:10:00] DEBUG [django.db.backends:91] (0.001) DELETE FROM "django_session" WHERE "django_session"."session_key" IN ('euu074g7rwmb4mrec1pfq1t2z2j9jj1m'); args=(u'euu074g7rwmb4mrec1pfq1t2z2j9jj1m',) 
+
+[22/Mar/2015 00:10:00] DEBUG [django.db.backends:91] (0.000) SELECT (1) AS "a" FROM "django_session" WHERE "django_session"."session_key" = 'mctya0vza00a8b1bykz2j7350nwm7ybu' LIMIT 1; args=(u'mctya0vza00a8b1bykz2j7350nwm7ybu',) 
+
+[22/Mar/2015 00:10:00] DEBUG [django.db.backends:91] (0.000) INSERT INTO "django_session" ("session_key", "session_data", "expire_date") VALUES ('mctya0vza00a8b1bykz2j7350nwm7ybu', 'N2M4ZmM4NWRiOTE5NWJjZjJjMzI0ZWJkYTNlZDZmNmQyMWQ4MDE0NDp7fQ==', '2015-04-04 16:10:00.545000+00:00'); args=(u'mctya0vza00a8b1bykz2j7350nwm7ybu', u'N2M4ZmM4NWRiOTE5NWJjZjJjMzI0ZWJkYTNlZDZmNmQyMWQ4MDE0NDp7fQ==', u'2015-04-04 16:10:00.545000+00:00') 
+
+[22/Mar/2015 00:10:00] DEBUG [django.db.backends:91] (0.001) UPDATE "django_session" SET "session_data" = 'N2M4ZmM4NWRiOTE5NWJjZjJjMzI0ZWJkYTNlZDZmNmQyMWQ4MDE0NDp7fQ==', "expire_date" = '2015-04-04 16:10:00.564541+00:00' WHERE "django_session"."session_key" = 'mctya0vza00a8b1bykz2j7350nwm7ybu'; args=(u'N2M4ZmM4NWRiOTE5NWJjZjJjMzI0ZWJkYTNlZDZmNmQyMWQ4MDE0NDp7fQ==', u'2015-04-04 16:10:00.564541+00:00', u'mctya0vza00a8b1bykz2j7350nwm7ybu') 
+
+[22/Mar/2015 00:10:02] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'mctya0vza00a8b1bykz2j7350nwm7ybu' AND "django_session"."expire_date" > '2015-03-21 16:10:02.274690+00:00') LIMIT 21; args=('mctya0vza00a8b1bykz2j7350nwm7ybu', u'2015-03-21 16:10:02.274690+00:00') 
+
+[22/Mar/2015 00:10:02] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'mctya0vza00a8b1bykz2j7350nwm7ybu' AND "django_session"."expire_date" > '2015-03-21 16:10:02.325460+00:00') LIMIT 21; args=('mctya0vza00a8b1bykz2j7350nwm7ybu', u'2015-03-21 16:10:02.325460+00:00') 
+
+[22/Mar/2015 00:10:04] DEBUG [django.db.backends:91] (0.003) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."username" = 'admin' LIMIT 21; args=(u'admin',) 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.001) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = 'mctya0vza00a8b1bykz2j7350nwm7ybu' AND "django_session"."expire_date" > '2015-03-21 16:10:05.048638+00:00') LIMIT 21; args=('mctya0vza00a8b1bykz2j7350nwm7ybu', u'2015-03-21 16:10:05.048638+00:00') 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.000) SELECT (1) AS "a" FROM "django_session" WHERE "django_session"."session_key" = '47a3q8lm3kdreznpn9twabxalg6wyx0e' LIMIT 1; args=(u'47a3q8lm3kdreznpn9twabxalg6wyx0e',) 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.001) INSERT INTO "django_session" ("session_key", "session_data", "expire_date") VALUES ('47a3q8lm3kdreznpn9twabxalg6wyx0e', 'N2M4ZmM4NWRiOTE5NWJjZjJjMzI0ZWJkYTNlZDZmNmQyMWQ4MDE0NDp7fQ==', '2015-04-04 16:10:05.055814+00:00'); args=(u'47a3q8lm3kdreznpn9twabxalg6wyx0e', u'N2M4ZmM4NWRiOTE5NWJjZjJjMzI0ZWJkYTNlZDZmNmQyMWQ4MDE0NDp7fQ==', u'2015-04-04 16:10:05.055814+00:00') 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.000) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE "django_session"."session_key" = 'mctya0vza00a8b1bykz2j7350nwm7ybu' LIMIT 21; args=('mctya0vza00a8b1bykz2j7350nwm7ybu',) 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.000) DELETE FROM "django_session" WHERE "django_session"."session_key" IN ('mctya0vza00a8b1bykz2j7350nwm7ybu'); args=(u'mctya0vza00a8b1bykz2j7350nwm7ybu',) 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.001) UPDATE "member_member" SET "last_login" = '2015-03-21 16:10:05.065034+00:00' WHERE "member_member"."id" = 1; args=(u'2015-03-21 16:10:05.065034+00:00', 1) 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.001) UPDATE "django_session" SET "session_data" = 'ODVmNWZkNTA4OTQzZDc5ZGY1MzMzOGJhMDI5N2I3YTAyMTcyNjkwNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjU0MWRlYjhlM2QxYjRlYjZhOTc4Zjc2MzQ4YjFkYzQ5YTA1ZTRhYTEiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjF9', "expire_date" = '2015-04-04 16:10:05.069307+00:00' WHERE "django_session"."session_key" = '47a3q8lm3kdreznpn9twabxalg6wyx0e'; args=(u'ODVmNWZkNTA4OTQzZDc5ZGY1MzMzOGJhMDI5N2I3YTAyMTcyNjkwNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjU0MWRlYjhlM2QxYjRlYjZhOTc4Zjc2MzQ4YjFkYzQ5YTA1ZTRhYTEiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjF9', u'2015-04-04 16:10:05.069307+00:00', u'47a3q8lm3kdreznpn9twabxalg6wyx0e') 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = '47a3q8lm3kdreznpn9twabxalg6wyx0e' AND "django_session"."expire_date" > '2015-03-21 16:10:05.094881+00:00') LIMIT 21; args=('47a3q8lm3kdreznpn9twabxalg6wyx0e', u'2015-03-21 16:10:05.094881+00:00') 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.001) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."id" = 1 LIMIT 21; args=(1,) 
+
+[22/Mar/2015 00:10:05] DEBUG [django.db.backends:91] (0.002) SELECT "django_admin_log"."id", "django_admin_log"."action_time", "django_admin_log"."user_id", "django_admin_log"."content_type_id", "django_admin_log"."object_id", "django_admin_log"."object_repr", "django_admin_log"."action_flag", "django_admin_log"."change_message", "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at", "django_content_type"."id", "django_content_type"."name", "django_content_type"."app_label", "django_content_type"."model" FROM "django_admin_log" INNER JOIN "member_member" ON ( "django_admin_log"."user_id" = "member_member"."id" ) LEFT OUTER JOIN "django_content_type" ON ( "django_admin_log"."content_type_id" = "django_content_type"."id" ) WHERE "django_admin_log"."user_id" = 1 ORDER BY "django_admin_log"."action_time" DESC LIMIT 10; args=(1,) 
+
+[22/Mar/2015 00:10:07] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = '47a3q8lm3kdreznpn9twabxalg6wyx0e' AND "django_session"."expire_date" > '2015-03-21 16:10:07.278886+00:00') LIMIT 21; args=('47a3q8lm3kdreznpn9twabxalg6wyx0e', u'2015-03-21 16:10:07.278886+00:00') 
+
+[22/Mar/2015 00:10:07] DEBUG [django.db.backends:91] (0.001) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."id" = 1 LIMIT 21; args=(1,) 
+
+[22/Mar/2015 00:10:07] DEBUG [django.db.backends:91] (0.001) SELECT "auth_group"."id", "auth_group"."name" FROM "auth_group"; args=() 
+
+[22/Mar/2015 00:10:07] DEBUG [django.db.backends:91] (0.001) SELECT COUNT(DISTINCT "member_member"."id") FROM "member_member"; args=() 
+
+[22/Mar/2015 00:10:07] DEBUG [django.db.backends:91] (0.001) SELECT DISTINCT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" ORDER BY "member_member"."username" ASC, "member_member"."id" DESC; args=() 
+
+[22/Mar/2015 00:10:07] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = '47a3q8lm3kdreznpn9twabxalg6wyx0e' AND "django_session"."expire_date" > '2015-03-21 16:10:07.513454+00:00') LIMIT 21; args=('47a3q8lm3kdreznpn9twabxalg6wyx0e', u'2015-03-21 16:10:07.513454+00:00') 
+
+[22/Mar/2015 00:10:07] DEBUG [django.db.backends:91] (0.001) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."id" = 1 LIMIT 21; args=(1,) 
+
+[22/Mar/2015 00:10:09] DEBUG [django.db.backends:91] (0.005) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = '47a3q8lm3kdreznpn9twabxalg6wyx0e' AND "django_session"."expire_date" > '2015-03-21 16:10:09.451192+00:00') LIMIT 21; args=('47a3q8lm3kdreznpn9twabxalg6wyx0e', u'2015-03-21 16:10:09.451192+00:00') 
+
+[22/Mar/2015 00:10:09] DEBUG [django.db.backends:91] (0.002) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."id" = 1 LIMIT 21; args=(1,) 
+
+[22/Mar/2015 00:10:09] DEBUG [django.db.backends:91] (0.002) SELECT COUNT(*) FROM "order_itemphoto"; args=() 
+
+[22/Mar/2015 00:10:09] DEBUG [django.db.backends:91] (0.003) SELECT "order_itemphoto"."id", "order_itemphoto"."created_at", "order_itemphoto"."updated_at", "order_itemphoto"."caption", "order_itemphoto"."img_url", "order_itemphoto"."img_thumb", "order_itemphoto"."item_id", "order_item"."id", "order_item"."created_at", "order_item"."updated_at", "order_item"."title", "order_item"."description", "order_item"."price", "order_item"."owner_id", "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "order_itemphoto" INNER JOIN "order_item" ON ( "order_itemphoto"."item_id" = "order_item"."id" ) INNER JOIN "member_member" ON ( "order_item"."owner_id" = "member_member"."id" ) ORDER BY "order_itemphoto"."id" DESC; args=() 
+
+[22/Mar/2015 00:10:09] DEBUG [django.db.backends:91] (0.002) SELECT "django_session"."session_key", "django_session"."session_data", "django_session"."expire_date" FROM "django_session" WHERE ("django_session"."session_key" = '47a3q8lm3kdreznpn9twabxalg6wyx0e' AND "django_session"."expire_date" > '2015-03-21 16:10:09.810263+00:00') LIMIT 21; args=('47a3q8lm3kdreznpn9twabxalg6wyx0e', u'2015-03-21 16:10:09.810263+00:00') 
+
+[22/Mar/2015 00:10:09] DEBUG [django.db.backends:91] (0.001) SELECT "member_member"."id", "member_member"."password", "member_member"."last_login", "member_member"."is_superuser", "member_member"."username", "member_member"."first_name", "member_member"."last_name", "member_member"."email", "member_member"."is_staff", "member_member"."is_active", "member_member"."date_joined", "member_member"."photo", "member_member"."created_at", "member_member"."updated_at" FROM "member_member" WHERE "member_member"."id" = 1 LIMIT 21; args=(1,) 
+
