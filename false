@@ -1,0 +1,237 @@
+*** Starting uWSGI 2.0.10 (64bit) on [Sat Mar 21 17:00:23 2015] ***
+compiled with version: 4.8.2 on 21 March 2015 16:38:37
+os: Linux-3.18.5-tinycore64 #1 SMP Sun Feb 1 06:02:30 UTC 2015
+nodename: 556c79afc0d2
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 8
+current working directory: /opt/ordergogo
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /opt/ordergogo
+your processes number limit is 1048576
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /opt/ordergogo/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Mar 22 2014, 23:03:41)  [GCC 4.8.2]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x1dc8de0
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 800448 bytes (781 KB) for 10 cores
+*** Operational MODE: preforking ***
+Traceback (most recent call last):
+  File "./ordergogo/wsgi.py", line 14, in <module>
+    application = get_wsgi_application()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/wsgi.py", line 14, in get_wsgi_application
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 21, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 202, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/models.py", line 40, in <module>
+    class Permission(models.Model):
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 122, in __new__
+    new_class.add_to_class('_meta', Options(meta, **kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 297, in add_to_class
+    value.contribute_to_class(cls, name)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/options.py", line 166, in contribute_to_class
+    self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/__init__.py", line 40, in __getattr__
+    return getattr(connections[DEFAULT_DB_ALIAS], item)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/utils.py", line 243, in __getitem__
+    conn = backend.DatabaseWrapper(db, alias)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/base.py", line 14, in __init__
+    self.ops = PostGISOperations(self)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 166, in __init__
+    if self.spatial_version < (1, 3, 4):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 55, in __get__
+    res = instance.__dict__[self.func.__name__] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 260, in spatial_version
+    vtup = self.postgis_version_tuple()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 434, in postgis_version_tuple
+    version = self.postgis_lib_version()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 414, in postgis_lib_version
+    return self._get_postgis_func('postgis_lib_version')
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 404, in _get_postgis_func
+    with self.connection.temporary_connection() as cursor:
+  File "/usr/lib/python2.7/contextlib.py", line 17, in __enter__
+    return self.gen.next()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 543, in temporary_connection
+    cursor = self.cursor()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 165, in cursor
+    cursor = self.make_debug_cursor(self._cursor())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 138, in _cursor
+    self.ensure_connection()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 133, in ensure_connection
+    self.connect()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/utils.py", line 94, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 133, in ensure_connection
+    self.connect()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 122, in connect
+    self.connection = self.get_new_connection(conn_params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 130, in get_new_connection
+    connection = Database.connect(**conn_params)
+  File "/usr/local/lib/python2.7/dist-packages/psycopg2/__init__.py", line 164, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, async=async)
+django.db.utils.OperationalError: could not connect to server: Connection refused
+	Is the server running on host "127.0.0.1" and accepting
+	TCP/IP connections on port 5432?
+
+unable to load app 0 (mountpoint='') (callable not found or import error)
+*** no app loaded. going in full dynamic mode ***
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 1138)
+spawned uWSGI worker 1 (pid: 1143, cores: 1)
+spawned uWSGI worker 2 (pid: 1144, cores: 1)
+spawned uWSGI worker 3 (pid: 1145, cores: 1)
+spawned uWSGI worker 4 (pid: 1146, cores: 1)
+spawned uWSGI worker 5 (pid: 1147, cores: 1)
+spawned uWSGI worker 6 (pid: 1148, cores: 1)
+spawned uWSGI worker 7 (pid: 1149, cores: 1)
+spawned uWSGI worker 8 (pid: 1150, cores: 1)
+spawned uWSGI worker 9 (pid: 1151, cores: 1)
+spawned uWSGI worker 10 (pid: 1152, cores: 1)
+...brutally killing workers...
+worker 1 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 4 buried after 1 seconds
+worker 5 buried after 1 seconds
+worker 6 buried after 1 seconds
+worker 7 buried after 1 seconds
+worker 8 buried after 1 seconds
+worker 9 buried after 1 seconds
+worker 10 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /opt/ordergogo
+closing all non-uwsgi socket fds > 2 (max_fd = 1048576)...
+found fd 3 mapped to socket 0 (/opt/ordergogo/uwsgi.sock)
+running /usr/local/bin/uwsgi
+[uWSGI] getting INI configuration from ordergogo/uwsgi.ini
+*** Starting uWSGI 2.0.10 (64bit) on [Sun Mar 22 01:01:43 2015] ***
+compiled with version: 4.8.2 on 21 March 2015 16:38:37
+os: Linux-3.18.5-tinycore64 #1 SMP Sun Feb 1 06:02:30 UTC 2015
+nodename: 556c79afc0d2
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 8
+current working directory: /opt/ordergogo
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /opt/ordergogo
+your processes number limit is 1048576
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /opt/ordergogo/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Mar 22 2014, 23:03:41)  [GCC 4.8.2]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x217dc10
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 800448 bytes (781 KB) for 10 cores
+*** Operational MODE: preforking ***
+Traceback (most recent call last):
+  File "./ordergogo/wsgi.py", line 14, in <module>
+    application = get_wsgi_application()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/wsgi.py", line 14, in get_wsgi_application
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 21, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 202, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/models.py", line 40, in <module>
+    class Permission(models.Model):
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 122, in __new__
+    new_class.add_to_class('_meta', Options(meta, **kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 297, in add_to_class
+    value.contribute_to_class(cls, name)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/options.py", line 166, in contribute_to_class
+    self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/__init__.py", line 40, in __getattr__
+    return getattr(connections[DEFAULT_DB_ALIAS], item)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/utils.py", line 243, in __getitem__
+    conn = backend.DatabaseWrapper(db, alias)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/base.py", line 14, in __init__
+    self.ops = PostGISOperations(self)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 166, in __init__
+    if self.spatial_version < (1, 3, 4):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 55, in __get__
+    res = instance.__dict__[self.func.__name__] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 260, in spatial_version
+    vtup = self.postgis_version_tuple()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 434, in postgis_version_tuple
+    version = self.postgis_lib_version()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 414, in postgis_lib_version
+    return self._get_postgis_func('postgis_lib_version')
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/gis/db/backends/postgis/operations.py", line 404, in _get_postgis_func
+    with self.connection.temporary_connection() as cursor:
+  File "/usr/lib/python2.7/contextlib.py", line 17, in __enter__
+    return self.gen.next()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 543, in temporary_connection
+    cursor = self.cursor()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 165, in cursor
+    cursor = self.make_debug_cursor(self._cursor())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 138, in _cursor
+    self.ensure_connection()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 133, in ensure_connection
+    self.connect()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/utils.py", line 94, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 133, in ensure_connection
+    self.connect()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 122, in connect
+    self.connection = self.get_new_connection(conn_params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 130, in get_new_connection
+    connection = Database.connect(**conn_params)
+  File "/usr/local/lib/python2.7/dist-packages/psycopg2/__init__.py", line 164, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, async=async)
+django.db.utils.OperationalError: could not connect to server: Connection refused
+	Is the server running on host "127.0.0.1" and accepting
+	TCP/IP connections on port 5432?
+
+unable to load app 0 (mountpoint='') (callable not found or import error)
+*** no app loaded. going in full dynamic mode ***
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 1138)
+spawned uWSGI worker 1 (pid: 1175, cores: 1)
+spawned uWSGI worker 2 (pid: 1176, cores: 1)
+spawned uWSGI worker 3 (pid: 1177, cores: 1)
+spawned uWSGI worker 4 (pid: 1178, cores: 1)
+spawned uWSGI worker 5 (pid: 1179, cores: 1)
+spawned uWSGI worker 6 (pid: 1180, cores: 1)
+spawned uWSGI worker 7 (pid: 1181, cores: 1)
+spawned uWSGI worker 8 (pid: 1182, cores: 1)
+spawned uWSGI worker 9 (pid: 1183, cores: 1)
+spawned uWSGI worker 10 (pid: 1184, cores: 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 1183|app: -1|req: -1/1] 127.0.0.1 () {34 vars in 380 bytes} [Sun Mar 22 01:04:09 2015] GET / => generated 21 bytes in 3 msecs (HTTP/1.1 500) 2 headers in 83 bytes (1 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 1183|app: -1|req: -1/2] 127.0.0.1 () {34 vars in 390 bytes} [Sun Mar 22 01:04:15 2015] GET /admin => generated 21 bytes in 2 msecs (HTTP/1.1 500) 2 headers in 83 bytes (1 switches on core 0)
+Sun Mar 22 01:04:38 2015 - uWSGI worker 1 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 2 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 3 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 4 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 5 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 6 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 7 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 8 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 10 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 01:04:38 2015 - uWSGI worker 9 screams: UAAAAAAH my master disconnected: i will kill myself !!!
