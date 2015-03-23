@@ -1,0 +1,347 @@
+*** Starting uWSGI 2.0.10 (64bit) on [Sun Mar 22 00:54:24 2015] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57) on 21 March 2015 22:27:18
+os: Darwin-14.1.0 Darwin Kernel Version 14.1.0: Thu Feb 26 19:26:47 PST 2015; root:xnu-2782.10.73~1/RELEASE_X86_64
+nodename: Davids-MBP
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 8
+current working directory: /Users/ddante/GDrive/Projects/OGG/ordergogo
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /Users/ddante/GDrive/Projects/OGG/ordergogo
+your processes number limit is 709
+your memory page size is 4096 bytes
+detected max file descriptor number: 2560
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Sep  9 2014, 15:04:36)  [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.39)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x7f9bf0c0cd60
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 800360 bytes (781 KB) for 10 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x7f9bf0c0cd60 pid: 14269 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 14269)
+spawned uWSGI worker 1 (pid: 14271, cores: 1)
+spawned uWSGI worker 2 (pid: 14272, cores: 1)
+spawned uWSGI worker 3 (pid: 14273, cores: 1)
+spawned uWSGI worker 4 (pid: 14274, cores: 1)
+spawned uWSGI worker 5 (pid: 14275, cores: 1)
+spawned uWSGI worker 6 (pid: 14276, cores: 1)
+spawned uWSGI worker 7 (pid: 14277, cores: 1)
+spawned uWSGI worker 8 (pid: 14278, cores: 1)
+spawned uWSGI worker 9 (pid: 14279, cores: 1)
+spawned uWSGI worker 10 (pid: 14280, cores: 1)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `cycle` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 14279|app: 0|req: 1/1] 127.0.0.1 () {40 vars in 780 bytes} [Sun Mar 22 00:54:31 2015] GET / => generated 101439 bytes in 234 msecs (HTTP/1.1 404) 2 headers in 80 bytes (13 switches on core 0)
+DAMN ! worker 10 (pid: 14280) died :( trying respawn ...
+Respawned uWSGI worker 10 (new pid: 18683)
+...brutally killing workers...
+worker 10 buried after 1 seconds
+worker 9 buried after 1 seconds
+worker 8 buried after 1 seconds
+worker 7 buried after 1 seconds
+worker 6 buried after 1 seconds
+worker 5 buried after 1 seconds
+worker 4 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /Users/ddante/GDrive/Projects/OGG/ordergogo
+closing all non-uwsgi socket fds > 2 (max_fd = 2560)...
+found fd 3 mapped to socket 0 (/Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock)
+running /usr/local/bin/uwsgi
+[uWSGI] getting INI configuration from ordergogo/uwsgi.ini
+*** Starting uWSGI 2.0.10 (64bit) on [Sun Mar 22 12:01:52 2015] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57) on 21 March 2015 22:27:18
+os: Darwin-14.1.0 Darwin Kernel Version 14.1.0: Thu Feb 26 19:26:47 PST 2015; root:xnu-2782.10.73~1/RELEASE_X86_64
+nodename: Davids-MBP
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 8
+current working directory: /Users/ddante/GDrive/Projects/OGG/ordergogo
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /Users/ddante/GDrive/Projects/OGG/ordergogo
+your processes number limit is 709
+your memory page size is 4096 bytes
+detected max file descriptor number: 2560
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Sep  9 2014, 15:04:36)  [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.39)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x7fae83e01050
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 800360 bytes (781 KB) for 10 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x7fae83e01050 pid: 14269 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 14269)
+spawned uWSGI worker 1 (pid: 18690, cores: 1)
+spawned uWSGI worker 2 (pid: 18691, cores: 1)
+spawned uWSGI worker 3 (pid: 18692, cores: 1)
+spawned uWSGI worker 4 (pid: 18693, cores: 1)
+spawned uWSGI worker 5 (pid: 18694, cores: 1)
+spawned uWSGI worker 6 (pid: 18695, cores: 1)
+spawned uWSGI worker 7 (pid: 18696, cores: 1)
+spawned uWSGI worker 8 (pid: 18697, cores: 1)
+spawned uWSGI worker 9 (pid: 18698, cores: 1)
+spawned uWSGI worker 10 (pid: 18699, cores: 1)
+Sun Mar 22 12:02:09 2015 - uWSGI worker 4 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 12:02:09 2015 - uWSGI worker 8 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 12:02:09 2015 - uWSGI worker 5 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 12:02:09 2015 - uWSGI worker 3 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 12:02:09 2015 - uWSGI worker 7 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 12:02:09 2015 - uWSGI worker 6 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 12:02:09 2015 - uWSGI worker 2 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 12:02:09 2015 - uWSGI worker 1 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+*** Starting uWSGI 2.0.10 (64bit) on [Sun Mar 22 12:03:56 2015] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57) on 21 March 2015 22:27:18
+os: Darwin-14.1.0 Darwin Kernel Version 14.1.0: Thu Feb 26 19:26:47 PST 2015; root:xnu-2782.10.73~1/RELEASE_X86_64
+nodename: Davids-MBP
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 8
+current working directory: /Users/ddante/GDrive/Projects/OGG/ordergogo
+writing pidfile to /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.pid
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /Users/ddante/GDrive/Projects/OGG/ordergogo
+your processes number limit is 709
+your memory page size is 4096 bytes
+detected max file descriptor number: 2560
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Sep  9 2014, 15:04:36)  [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.39)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x7fa2ebd00830
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 800360 bytes (781 KB) for 10 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x7fa2ebd00830 pid: 18751 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 18751)
+spawned uWSGI worker 1 (pid: 18753, cores: 1)
+spawned uWSGI worker 2 (pid: 18754, cores: 1)
+spawned uWSGI worker 3 (pid: 18755, cores: 1)
+spawned uWSGI worker 4 (pid: 18756, cores: 1)
+spawned uWSGI worker 5 (pid: 18757, cores: 1)
+spawned uWSGI worker 6 (pid: 18758, cores: 1)
+spawned uWSGI worker 7 (pid: 18759, cores: 1)
+spawned uWSGI worker 8 (pid: 18760, cores: 1)
+spawned uWSGI worker 9 (pid: 18761, cores: 1)
+spawned uWSGI worker 10 (pid: 18762, cores: 1)
+[pid: 18762|app: 0|req: 1/1] 127.0.0.1 () {40 vars in 790 bytes} [Sun Mar 22 12:04:59 2015] GET /admin => generated 0 bytes in 105 msecs (HTTP/1.1 301) 3 headers in 144 bytes (1 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `firstof` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `cycle` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 18762|app: 0|req: 2/2] 127.0.0.1 () {40 vars in 792 bytes} [Sun Mar 22 12:04:59 2015] GET /admin/ => generated 152398 bytes in 293 msecs (HTTP/1.1 200) 6 headers in 214 bytes (19 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `cycle` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 18757|app: 0|req: 1/3] 127.0.0.1 () {44 vars in 792 bytes} [Sun Mar 22 12:08:48 2015] GET / => generated 101568 bytes in 202 msecs (HTTP/1.1 404) 2 headers in 80 bytes (14 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `cycle` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 18760|app: 0|req: 1/4] 127.0.0.1 () {44 vars in 815 bytes} [Sun Mar 22 12:10:07 2015] GET /?format=json => generated 101907 bytes in 204 msecs (HTTP/1.1 404) 2 headers in 80 bytes (13 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `cycle` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 18761|app: 0|req: 1/5] 127.0.0.1 () {44 vars in 806 bytes} [Sun Mar 22 12:10:14 2015] GET /member/ => generated 103511 bytes in 215 msecs (HTTP/1.1 404) 2 headers in 80 bytes (13 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `cycle` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 18759|app: 0|req: 1/6] 127.0.0.1 () {48 vars in 904 bytes} [Sun Mar 22 12:10:51 2015] POST /member/login => generated 171363 bytes in 248 msecs (HTTP/1.1 500) 2 headers in 92 bytes (21 switches on core 0)
+[pid: 18760|app: 0|req: 2/7] 127.0.0.1 () {48 vars in 906 bytes} [Sun Mar 22 12:10:54 2015] POST /member/login/ => generated 52 bytes in 195 msecs (HTTP/1.1 200) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 18761|app: 0|req: 2/8] 127.0.0.1 () {48 vars in 922 bytes} [Sun Mar 22 12:14:27 2015] POST /member/login/ => generated 76 bytes in 23 msecs (HTTP/1.1 415) 3 headers in 122 bytes (1 switches on core 0)
+[pid: 18762|app: 0|req: 3/9] 127.0.0.1 () {48 vars in 906 bytes} [Sun Mar 22 12:14:36 2015] POST /member/login/ => generated 52 bytes in 110 msecs (HTTP/1.1 200) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 18761|app: 0|req: 3/10] 127.0.0.1 () {48 vars in 892 bytes} [Sun Mar 22 12:17:26 2015] POST /order/ => generated 58 bytes in 22 msecs (HTTP/1.1 401) 5 headers in 162 bytes (1 switches on core 0)
+[pid: 18761|app: 0|req: 4/11] 127.0.0.1 () {48 vars in 906 bytes} [Sun Mar 22 12:17:33 2015] POST /member/login/ => generated 52 bytes in 120 msecs (HTTP/1.1 200) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 18759|app: 0|req: 2/12] 127.0.0.1 () {46 vars in 872 bytes} [Sun Mar 22 12:18:18 2015] GET /order/ => generated 23 bytes in 57 msecs (HTTP/1.1 200) 4 headers in 127 bytes (1 switches on core 0)
+[pid: 18761|app: 0|req: 5/13] 127.0.0.1 () {46 vars in 872 bytes} [Sun Mar 22 13:00:46 2015] GET /order/ => generated 23 bytes in 50 msecs (HTTP/1.1 200) 4 headers in 127 bytes (1 switches on core 0)
+[pid: 18762|app: 0|req: 4/14] 127.0.0.1 () {46 vars in 894 bytes} [Sun Mar 22 13:00:53 2015] GET /location/address/ => generated 26 bytes in 39 msecs (HTTP/1.1 200) 4 headers in 127 bytes (1 switches on core 0)
+[pid: 18759|app: 0|req: 3/15] 127.0.0.1 () {46 vars in 872 bytes} [Sun Mar 22 13:01:17 2015] GET /order/ => generated 23 bytes in 37 msecs (HTTP/1.1 200) 4 headers in 127 bytes (1 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `firstof` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 18761|app: 0|req: 6/16] 127.0.0.1 () {42 vars in 847 bytes} [Sun Mar 22 13:01:55 2015] GET /admin/ => generated 152586 bytes in 270 msecs (HTTP/1.1 200) 6 headers in 214 bytes (19 switches on core 0)
+[pid: 18762|app: 0|req: 5/17] 127.0.0.1 () {42 vars in 871 bytes} [Sun Mar 22 13:01:58 2015] GET /admin/location/address/ => generated 120645 bytes in 172 msecs (HTTP/1.1 200) 7 headers in 336 bytes (15 switches on core 0)
+[pid: 18761|app: 0|req: 7/18] 127.0.0.1 () {42 vars in 797 bytes} [Sun Mar 22 13:01:58 2015] GET /admin/jsi18n/ => generated 2372 bytes in 33 msecs (HTTP/1.1 200) 3 headers in 93 bytes (1 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `firstof` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+/Library/Python/2.7/site-packages/django/template/base.py:770: RemovedInDjango18Warning: Options.module_name has been deprecated in favor of model_name
+  current = getattr(current, bit)
+
+[pid: 18760|app: 0|req: 3/19] 127.0.0.1 () {42 vars in 896 bytes} [Sun Mar 22 13:02:00 2015] GET /admin/location/address/add/ => generated 169785 bytes in 236 msecs (HTTP/1.1 200) 7 headers in 336 bytes (22 switches on core 0)
+[pid: 18761|app: 0|req: 8/20] 127.0.0.1 () {42 vars in 801 bytes} [Sun Mar 22 13:02:00 2015] GET /admin/jsi18n/ => generated 2372 bytes in 35 msecs (HTTP/1.1 200) 3 headers in 93 bytes (1 switches on core 0)
+[pid: 18762|app: 0|req: 6/21] 127.0.0.1 () {50 vars in 1149 bytes} [Sun Mar 22 13:03:20 2015] POST /admin/location/address/add/ => generated 0 bytes in 152 msecs (HTTP/1.1 302) 8 headers in 475 bytes (1 switches on core 0)
+[pid: 18762|app: 0|req: 7/22] 127.0.0.1 () {44 vars in 1092 bytes} [Sun Mar 22 13:03:21 2015] GET /admin/location/address/ => generated 123860 bytes in 166 msecs (HTTP/1.1 200) 8 headers in 418 bytes (16 switches on core 0)
+[pid: 18762|app: 0|req: 8/23] 127.0.0.1 () {42 vars in 797 bytes} [Sun Mar 22 13:03:21 2015] GET /admin/jsi18n/ => generated 2372 bytes in 32 msecs (HTTP/1.1 200) 3 headers in 93 bytes (1 switches on core 0)
+[pid: 18762|app: 0|req: 9/24] 127.0.0.1 () {46 vars in 894 bytes} [Sun Mar 22 13:03:30 2015] GET /location/address/ => generated 316 bytes in 50 msecs (HTTP/1.1 200) 4 headers in 127 bytes (1 switches on core 0)
+[pid: 18761|app: 0|req: 9/25] 127.0.0.1 () {44 vars in 782 bytes} [Sun Mar 22 15:21:34 2015] GET /location/address/ => generated 316 bytes in 150 msecs (HTTP/1.1 200) 4 headers in 127 bytes (1 switches on core 0)
+...gracefully killing workers...
+Gracefully killing worker 2 (pid: 18754)...
+Gracefully killing worker 5 (pid: 18757)...
+Gracefully killing worker 9 (pid: 18761)...
+Gracefully killing worker 8 (pid: 18760)...
+Gracefully killing worker 6 (pid: 18758)...
+Gracefully killing worker 10 (pid: 18762)...
+Gracefully killing worker 3 (pid: 18755)...
+Gracefully killing worker 4 (pid: 18756)...
+Gracefully killing worker 7 (pid: 18759)...
+Gracefully killing worker 1 (pid: 18753)...
+worker 10 buried after 1 seconds
+worker 9 buried after 1 seconds
+worker 8 buried after 1 seconds
+worker 7 buried after 1 seconds
+worker 6 buried after 1 seconds
+worker 5 buried after 1 seconds
+worker 4 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /Users/ddante/GDrive/Projects/OGG/ordergogo
+closing all non-uwsgi socket fds > 2 (max_fd = 2560)...
+found fd 3 mapped to socket 0 (/Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock)
+running /usr/local/bin/uwsgi
+[uWSGI] getting INI configuration from ordergogo/uwsgi.ini
+*** Starting uWSGI 2.0.10 (64bit) on [Sun Mar 22 15:22:13 2015] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57) on 21 March 2015 22:27:18
+os: Darwin-14.1.0 Darwin Kernel Version 14.1.0: Thu Feb 26 19:26:47 PST 2015; root:xnu-2782.10.73~1/RELEASE_X86_64
+nodename: Davids-MBP
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 8
+current working directory: /Users/ddante/GDrive/Projects/OGG/ordergogo
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /Users/ddante/GDrive/Projects/OGG/ordergogo
+your processes number limit is 709
+your memory page size is 4096 bytes
+detected max file descriptor number: 2560
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Sep  9 2014, 15:04:36)  [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.39)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x7fd003f011b0
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 800360 bytes (781 KB) for 10 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x7fd003f011b0 pid: 18751 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 18751)
+spawned uWSGI worker 1 (pid: 22350, cores: 1)
+spawned uWSGI worker 2 (pid: 22351, cores: 1)
+spawned uWSGI worker 3 (pid: 22352, cores: 1)
+spawned uWSGI worker 4 (pid: 22353, cores: 1)
+spawned uWSGI worker 5 (pid: 22354, cores: 1)
+spawned uWSGI worker 6 (pid: 22355, cores: 1)
+spawned uWSGI worker 7 (pid: 22356, cores: 1)
+spawned uWSGI worker 8 (pid: 22357, cores: 1)
+spawned uWSGI worker 9 (pid: 22358, cores: 1)
+spawned uWSGI worker 10 (pid: 22359, cores: 1)
+[pid: 22358|app: 0|req: 1/1] 127.0.0.1 () {44 vars in 782 bytes} [Sun Mar 22 15:22:16 2015] GET /location/address/ => generated 399 bytes in 165 msecs (HTTP/1.1 200) 4 headers in 127 bytes (1 switches on core 0)
+...gracefully killing workers...
+Gracefully killing worker 2 (pid: 22351)...
+Gracefully killing worker 4 (pid: 22353)...
+Gracefully killing worker 5 (pid: 22354)...
+Gracefully killing worker 9 (pid: 22358)...
+Gracefully killing worker 8 (pid: 22357)...
+Gracefully killing worker 10 (pid: 22359)...
+Gracefully killing worker 3 (pid: 22352)...
+Gracefully killing worker 6 (pid: 22355)...
+Gracefully killing worker 1 (pid: 22350)...
+Gracefully killing worker 7 (pid: 22356)...
+worker 10 buried after 1 seconds
+worker 9 buried after 1 seconds
+worker 8 buried after 1 seconds
+worker 7 buried after 1 seconds
+worker 6 buried after 1 seconds
+worker 5 buried after 1 seconds
+worker 4 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /Users/ddante/GDrive/Projects/OGG/ordergogo
+closing all non-uwsgi socket fds > 2 (max_fd = 2560)...
+found fd 3 mapped to socket 0 (/Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock)
+running /usr/local/bin/uwsgi
+[uWSGI] getting INI configuration from ordergogo/uwsgi.ini
+*** Starting uWSGI 2.0.10 (64bit) on [Sun Mar 22 15:23:31 2015] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57) on 21 March 2015 22:27:18
+os: Darwin-14.1.0 Darwin Kernel Version 14.1.0: Thu Feb 26 19:26:47 PST 2015; root:xnu-2782.10.73~1/RELEASE_X86_64
+nodename: Davids-MBP
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 8
+current working directory: /Users/ddante/GDrive/Projects/OGG/ordergogo
+detected binary path: /usr/local/bin/uwsgi
+chdir() to /Users/ddante/GDrive/Projects/OGG/ordergogo
+your processes number limit is 709
+your memory page size is 4096 bytes
+detected max file descriptor number: 2560
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Sep  9 2014, 15:04:36)  [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.39)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x7fcf5b000130
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 800360 bytes (781 KB) for 10 cores
+*** Operational MODE: preforking ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x7fcf5b000130 pid: 18751 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 18751)
+spawned uWSGI worker 1 (pid: 22389, cores: 1)
+spawned uWSGI worker 2 (pid: 22390, cores: 1)
+spawned uWSGI worker 3 (pid: 22391, cores: 1)
+spawned uWSGI worker 4 (pid: 22392, cores: 1)
+spawned uWSGI worker 5 (pid: 22393, cores: 1)
+spawned uWSGI worker 6 (pid: 22394, cores: 1)
+spawned uWSGI worker 7 (pid: 22395, cores: 1)
+spawned uWSGI worker 8 (pid: 22396, cores: 1)
+spawned uWSGI worker 9 (pid: 22397, cores: 1)
+spawned uWSGI worker 10 (pid: 22398, cores: 1)
+[pid: 22398|app: 0|req: 1/1] 127.0.0.1 () {38 vars in 678 bytes} [Sun Mar 22 15:23:34 2015] GET /admin => generated 0 bytes in 35 msecs (HTTP/1.1 301) 3 headers in 144 bytes (1 switches on core 0)
+[pid: 22398|app: 0|req: 2/2] 127.0.0.1 () {38 vars in 680 bytes} [Sun Mar 22 15:23:34 2015] GET /admin/ => generated 0 bytes in 36 msecs (HTTP/1.1 302) 7 headers in 277 bytes (1 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `firstof` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `cycle` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 22398|app: 0|req: 3/3] 127.0.0.1 () {38 vars in 717 bytes} [Sun Mar 22 15:23:34 2015] GET /admin/login/?next=/admin/ => generated 91131 bytes in 137 msecs (HTTP/1.1 200) 7 headers in 336 bytes (13 switches on core 0)
+/Library/Python/2.7/site-packages/django/template/base.py:290: RemovedInDjango18Warning: 'The `cycle` template tag is changing to escape its arguments; the non-autoescaping version is deprecated. Load it from the `future` tag library to start using the new behavior.
+  compiled_result = compile_func(self, token)
+
+[pid: 22397|app: 0|req: 1/4] 127.0.0.1 () {40 vars in 687 bytes} [Sun Mar 22 15:23:35 2015] GET /favicon.ico => generated 100621 bytes in 160 msecs (HTTP/1.1 404) 2 headers in 80 bytes (14 switches on core 0)
+Sun Mar 22 15:23:46 2015 - uWSGI worker 5 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 6 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 1 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 2 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 7 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 4 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 8 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 9 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 10 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Sun Mar 22 15:23:46 2015 - uWSGI worker 3 screams: UAAAAAAH my master disconnected: i will kill myself !!!

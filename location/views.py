@@ -16,10 +16,10 @@ class AddressList(APIView):
     def post(self, request, format=None):
         serializedAddress = AddressSerializer(data=request.data)
         if serializedAddress.is_valid():
-            gps_data = request.data['gps_location']
-            gps_location = GEOSGeometry('POINT(%s %s)' % (gps_data['lat'], gps_data['lon']))
+            # gps_data = request.data['gps_location']
+            # gps_location = GEOSGeometry('POINT(%s %s)' % (gps_data['lat'], gps_data['lon']))
 
-            serializedAddress.save(owner=request.user, gps_location=gps_location)
+            serializedAddress.save(owner=request.user)
             return Response(serializedAddress.data, status=status.HTTP_201_CREATED)
         return Response(serializedAddress.errors, status=status.HTTP_400_BAD_REQUEST)
 

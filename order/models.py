@@ -16,6 +16,7 @@ class Order(GenericModel):
     location_from       = models.ForeignKey('location.Address', related_name='order_location_from')
     location_to         = models.ForeignKey('location.Address', related_name='order_location_to')
     # reference_number    = models.CharField(max_length=64, unique=True, blank=True, default=)
+    tracking_id = models.CharField(max_length=64, blank=True)
     owner       = models.ForeignKey('member.Member', related_name='order_owner')
     items       = models.ManyToManyField('order.Item', through='order.OrderItem')
 

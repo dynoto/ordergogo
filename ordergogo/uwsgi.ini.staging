@@ -22,3 +22,5 @@ socket          = /opt/ordergogo/uwsgi.sock
 vacuum          = true
 
 daemonize       = true
+
+pidfile         = /opt/ordergogo/uwsgi.pid

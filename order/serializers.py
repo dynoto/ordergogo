@@ -20,11 +20,11 @@ class OrderItemSerializer(DynamicFieldsModelSerializer):
 
 class OrderSerializer(DynamicFieldsModelSerializer):
     items = OrderItemSerializer(source='orderitem_set', many=True, read_only=True)
-    # reference_number = serializers.ReadOnlyField()
-    location_from = AddressSerializer()
-    location_to = AddressSerializer()
-
 
     class Meta:
         model = Order
         field = (Order._meta.get_all_field_names())
+
+class OrderReadSerializer(OrderSerializer):
+    location_from = AddressSerializer()
+    location_to = AddressSerializer()

@@ -22,3 +22,5 @@ socket          = /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock
 vacuum          = true
 
 daemonize       = true
+
+pidfile         = /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.pid
