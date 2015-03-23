@@ -15,4 +15,4 @@ pytz==2014.10
 six==1.5.2
 sqlparse==0.1.14
 suit==2.0.2
-git+https://github.com/djangonauts/django-rest-framework-gis/tarball/master
+git+https://github.com/djangonauts/django-rest-framework-gis.git

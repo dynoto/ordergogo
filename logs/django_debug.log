@@ -21386,3 +21386,5 @@ Write an explicit `.create()` method for serializer `order.serializers.OrderSeri
 
 [23/Mar/2015 22:06:16] DEBUG [django.db.backends:91] (0.004) SELECT postgis_lib_version(); args=None 
 
+[23/Mar/2015 22:15:45] DEBUG [django.db.backends:91] (0.005) SELECT postgis_lib_version(); args=None 
+
