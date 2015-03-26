@@ -13,11 +13,11 @@ class Order(GenericModel):
     is_assigned = models.BooleanField(default=False)
     is_delivered= models.BooleanField(default=False)
     assigned_to = models.ForeignKey('member.Member', blank=True, null=True, on_delete=models.SET_NULL, related_name='order_assigned_to')
-    location_from       = models.ForeignKey('location.Address', related_name='order_location_from')
-    location_to         = models.ForeignKey('location.Address', related_name='order_location_to')
+    location_from       = models.ForeignKey('location.Address', related_name='order_location_from', on_delete=models.PROTECT)
+    location_to         = models.ForeignKey('location.Address', related_name='order_location_to', on_delete=models.PROTECT)
     # reference_number    = models.CharField(max_length=64, unique=True, blank=True, default=)
     tracking_id = models.CharField(max_length=64, blank=True)
-    owner       = models.ForeignKey('member.Member', related_name='order_owner')
+    owner       = models.ForeignKey('member.Member', related_name='order_owner', on_delete=models.PROTECT)
     items       = models.ManyToManyField('order.Item', through='order.OrderItem')
 
 
@@ -29,10 +29,12 @@ class Item(GenericModel):
     title       = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     price       = models.FloatField(null=True)
-    owner       = models.ForeignKey('member.Member', related_name='item_owner')
+    owner       = models.ForeignKey('member.Member', related_name='item_owner', on_delete=models.PROTECT)
 
-class ItemPhoto(Photo):
+class ItemPhoto(GenericModel):
     item        = models.ForeignKey('order.Item')
+    caption     = models.CharField(max_length=254, default='')
+    photo       = models.ImageField(upload_to='media/item/', null=True)
 
 class OrderItem(GenericModel):
     quantity    = models.IntegerField()

@@ -22,5 +22,17 @@ class Address(models.Model):
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
     owner           = models.ForeignKey('member.Member', related_name='address_owner')
-
+    area            = models.ForeignKey('location.Area', related_name='address_area', on_delete=models.SET_NULL, null=True, blank=True)
     objects = models.GeoManager()
+
+class Area(models.Model):
+    class Meta:
+        verbose_name = _('Area')
+        verbose_name_plural = _('Areas')
+
+    area_name       = models.CharField(max_length=255, blank=True,default="")
+    gps_location    = models.PointField(null=True)
+    objects         = models.GeoManager()
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)
+    owner           = models.ForeignKey('member.Member', related_name='area_owner', null=True, blank=True)

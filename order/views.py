@@ -11,7 +11,7 @@ class OrderList(APIView):
     def get(self, request, format=None):
         orders = Order.objects.filter(owner=request.user)
         orders, count = GenericUtils.paginator(orders, request.QUERY_PARAMS.get('page'))
-        serializedItems = OrderReadSerializer(orders, many=True)
+        serializedItems = OrderReadSerializer(orders, many=True, exclude=('location_from','location_to','items'))
         return Response({'orders':serializedItems.data, 'count':count})
 
     def post(self, request, format=None):
@@ -40,7 +40,7 @@ class OrderDetail(APIView):
     def get(self, request, order_id, format=None):
         try:
             order = Order.objects.get(owner=request.user, id=order_id)
-            serializedOrder = OrderSerializer(order)
+            serializedOrder = OrderReadSerializer(order)
             return Response(serializedOrder.data)
         except:
             return Response({'message':'You are not authorized to modify this order'})

@@ -1,4 +1,5 @@
 from generic.serializers import DynamicFieldsModelSerializer
+from member.serializers import MemberSerializer
 from location.serializers import AddressSerializer
 from rest_framework import serializers
 from order.models import Order, OrderItem, Item, ItemPhoto
@@ -28,3 +29,5 @@ class OrderSerializer(DynamicFieldsModelSerializer):
 class OrderReadSerializer(OrderSerializer):
     location_from = AddressSerializer()
     location_to = AddressSerializer()
+    owner = MemberSerializer()
+    assigned_to = MemberSerializer()
