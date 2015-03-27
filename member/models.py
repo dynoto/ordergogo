@@ -1,4 +1,4 @@
-from generic.models import GenericModel
+from generic.models import GenericModel, generate_photo_name
 from django.db import models, IntegrityError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
@@ -20,11 +20,11 @@ class Member(AbstractUser):
     def __str__(self):
         return str(self.username)
 
-    photo = models.URLField(null=True, blank=True)
+    photo       = models.ImageField(upload_to=generate_photo_name, null=True)
 
     # is_authenticated = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at  = models.DateTimeField(auto_now_add=True)
+    updated_at  = models.DateTimeField(auto_now=True)
 
 
 class Company(GenericModel):

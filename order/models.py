@@ -1,6 +1,6 @@
 from django.db import models
 from random import randrange
-from generic.models import Photo, GenericModel
+from generic.models import Photo, GenericModel, generate_photo_name
 
 # Create your models here.
 class Order(GenericModel):
@@ -33,14 +33,10 @@ class Item(GenericModel):
     owner       = models.ForeignKey('member.Member', related_name='item_owner', on_delete=models.PROTECT)
 
 class ItemPhoto(GenericModel):
-    def gen_photo_name(self, filename):
-        url = "media/item/%s/%s%s" % (self.item.id, randrange(100000,999999), filename)
-        return url
-
 
     item        = models.ForeignKey('order.Item')
     caption     = models.CharField(max_length=254, default='', blank=True)
-    photo       = models.ImageField(upload_to=gen_photo_name, null=True)
+    photo       = models.ImageField(upload_to=generate_photo_name, null=True)
 
 class OrderItem(GenericModel):
     quantity    = models.IntegerField()

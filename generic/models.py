@@ -1,4 +1,9 @@
 from django.db import models
+from random import randrange
+
+def generate_photo_name(self, filename):
+        url = "media/item/%s/%s%s" % (self.item.id, randrange(100000,999999), filename)
+        return url
 
 # Create your models here.
 class GenericModel(models.Model):
