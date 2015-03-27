@@ -1,5 +1,6 @@
-upstream django {
-    server unix:///Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock;
+upstream django_ogg {
+    #server unix:///Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock;
+    server 127.0.0.1:10000;
 }
 
 server {
@@ -9,16 +10,21 @@ server {
 
     client_max_body_size 2M;
 
-    location /media  {
-        alias /Users/ddante/GDrive/Projects/OGG/ordergogo/media;
+    error_log "/var/log/nginx/django_ogg_error.log";
+
+    location /media/  {
+        alias "/Users/ddante/GDrive/Projects/OGG/ordergogo/media/";
     }
 
-    location /static  {
-        alias /Users/ddante/GDrive/Projects/OGG/ordergogo/static;
+    location /static/  {
+        alias "/Users/ddante/GDrive/Projects/OGG/ordergogo/static/";
     }
 
+    # location / {
+    #     uwsgi_pass  django_ogg;
+    #     include     uwsgi_params;
+    # }
     location / {
-        uwsgi_pass  django;
-        include     uwsgi_params;
+        proxy_pass http://django_ogg;
     }
 }

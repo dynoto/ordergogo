@@ -198,3 +198,5 @@ CACHES = {
         }
     }
 }
+
+MEDIA_URL = '/'

@@ -1,4 +1,5 @@
 from django.db import models
+from random import randrange
 from generic.models import Photo, GenericModel
 
 # Create your models here.
@@ -32,9 +33,14 @@ class Item(GenericModel):
     owner       = models.ForeignKey('member.Member', related_name='item_owner', on_delete=models.PROTECT)
 
 class ItemPhoto(GenericModel):
+    def gen_photo_name(self, filename):
+        url = "media/item/%s/%s%s" % (self.item.id, randrange(100000,999999), filename)
+        return url
+
+
     item        = models.ForeignKey('order.Item')
-    caption     = models.CharField(max_length=254, default='')
-    photo       = models.ImageField(upload_to='media/item/', null=True)
+    caption     = models.CharField(max_length=254, default='', blank=True)
+    photo       = models.ImageField(upload_to=gen_photo_name, null=True)
 
 class OrderItem(GenericModel):
     quantity    = models.IntegerField()
@@ -42,5 +48,3 @@ class OrderItem(GenericModel):
     order_price = models.FloatField(null=True, blank=True) #sometimes price can change after order has been made, this is to ensure it keeps the record when order been made
     order       = models.ForeignKey('order.Order')
     item        = models.ForeignKey('order.Item')
-
-

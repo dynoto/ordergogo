@@ -4,10 +4,18 @@ from location.serializers import AddressSerializer
 from rest_framework import serializers
 from order.models import Order, OrderItem, Item, ItemPhoto
 
+class ItemPhotoSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = ItemPhoto
+        field = ('photo','caption','id')
+
+
 class ItemSerializer(DynamicFieldsModelSerializer):
+    photos = ItemPhotoSerializer(source='itemphoto_set', many=True)
+
     class Meta:
         model = Item
-        field = (Item._meta.get_all_field_names())
+        field = ('title','description','price','item_photos')
 
 class OrderItemSerializer(DynamicFieldsModelSerializer):
     title          = serializers.ReadOnlyField(source='item.title')

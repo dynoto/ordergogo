@@ -9,12 +9,12 @@ server {
 
     client_max_body_size 2M;
 
-    location /media  {
-        alias /opt/ordergogo/media;
+    location /media/  {
+        alias "/opt/ordergogo/media/";
     }
 
-    location /static  {
-        alias /opt/ordergogo/static;
+    location /static/  {
+        alias "/opt/ordergogo/static";
     }
 
     location / {
