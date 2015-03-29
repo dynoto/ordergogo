@@ -37,6 +37,7 @@ class ItemPhoto(GenericModel):
     item        = models.ForeignKey('order.Item')
     caption     = models.CharField(max_length=254, default='', blank=True)
     photo       = models.ImageField(upload_to=generate_photo_name, null=True)
+    owner       = models.ForeignKey('member.Member', related_name='item_photo_owner', on_delete=models.PROTECT)
 
 class OrderItem(GenericModel):
     quantity    = models.IntegerField()
