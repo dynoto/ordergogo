@@ -11,6 +11,9 @@ from django.contrib.auth.models import AbstractUser
 # from django.utils.timezone import utc
 # from django.conf import settings
 # import datetime
+def generate_photo_name(self, filename):
+        url = "media/item/%s/%s%s" % (self.id, randrange(100000,999999), filename)
+        return url
 
 # Create your models here.
 class Member(AbstractUser):
@@ -49,8 +52,3 @@ class CompanyStaff(GenericModel):
 
     company = models.ForeignKey('member.Company')
     member  = models.ForeignKey('member.Member')
-
-
-def generate_photo_name(self, filename):
-        url = "media/item/%s/%s%s" % (self.id, randrange(100000,999999), filename)
-        return url
