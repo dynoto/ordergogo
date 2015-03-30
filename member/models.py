@@ -1,4 +1,5 @@
-from generic.models import GenericModel, generate_photo_name
+from random import randrange
+from generic.models import GenericModel
 from django.db import models, IntegrityError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
@@ -48,3 +49,8 @@ class CompanyStaff(GenericModel):
 
     company = models.ForeignKey('member.Company')
     member  = models.ForeignKey('member.Member')
+
+
+def generate_photo_name(self, filename):
+        url = "media/item/%s/%s%s" % (self.id, randrange(100000,999999), filename)
+        return url

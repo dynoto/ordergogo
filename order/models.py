@@ -1,6 +1,6 @@
-from django.db import models
 from random import randrange
-from generic.models import Photo, GenericModel, generate_photo_name
+from django.db import models
+from generic.models import GenericModel
 
 # Create your models here.
 class Order(GenericModel):
@@ -45,3 +45,7 @@ class OrderItem(GenericModel):
     order_price = models.FloatField(null=True, blank=True) #sometimes price can change after order has been made, this is to ensure it keeps the record when order been made
     order       = models.ForeignKey('order.Order')
     item        = models.ForeignKey('order.Item')
+
+def generate_photo_name(self, filename):
+        url = "media/item/%s/%s%s" % (self.item.id, randrange(100000,999999), filename)
+        return url
