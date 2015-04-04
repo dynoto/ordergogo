@@ -1,10 +1,14 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from order.models import Order, Item
-from order.serializers import OrderSerializer, OrderReadSerializer, ItemSerializer, OrderItemSerializer
-import generic.utils as GenericUtils
+from rest_framework.parsers import MultiPartParser
+from order.models import Order, Item, ItemPhoto
+from order.serializers import OrderSerializer, OrderReadSerializer, ItemSerializer, OrderItemSerializer, ItemPhotoSerializer
 from django.core.cache import cache
+from django.http import Http404
+
+import generic.utils as GenericUtils
+from generic.views import GenericList, GenericDetails
 
 # Create your views here.
 class OrderList(APIView):
@@ -37,6 +41,12 @@ class OrderList(APIView):
 
 
 class OrderDetail(APIView):
+    def get_object(self, user, Order_id):
+        try:
+            return Order.objects.get(owner=user, id=Order_id)
+        except:
+            raise Http404
+
     def get(self, request, order_id, format=None):
         try:
             order = Order.objects.get(owner=request.user, id=order_id)
@@ -73,12 +83,9 @@ class OrderTrack(APIView):
 
 
 
-class ItemList(APIView):
-    def get(self, request, format=None):
-        items = Item.objects.filter(owner=request.user)
-        items, count = GenericUtils.paginator(items, request.QUERY_PARAMS.get('page'))
-        serializedItems = ItemSerializer(items, many=True)
-        return Response({'items':serializedItems.data, 'count':count})
+class ItemList(GenericList):
+    Model = Item
+    ModelSerializer = ItemSerializer
 
     def post(self, request, format=None):
         request.data['owner'] = request.user.id
@@ -91,8 +98,17 @@ class ItemList(APIView):
         
 
 
-class ItemDetail(APIView):
-    def get(self, request, item_id, format=None):
+class ItemDetail(GenericDetails):
+    Model = Item
+    ModelSerializer = ItemSerializer
+
+
+class PhotoList(GenericList):
+    Model = ItemPhoto
+    ModelSerializer = ItemPhotoSerializer
+    parser_classes = (MultiPartParser,)
+
+    def post(self, request, item_id, format=None):
         item = Item.objects.get(owner=request.user, id=item_id)
-        serializedItem = ItemSerializer(item)
-        return Response(serializedItem.data)
+
+# class PhotoDetails(APIView):

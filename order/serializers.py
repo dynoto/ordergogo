@@ -11,7 +11,7 @@ class ItemPhotoSerializer(DynamicFieldsModelSerializer):
 
 
 class ItemSerializer(DynamicFieldsModelSerializer):
-    photos = ItemPhotoSerializer(source='itemphoto_set', many=True)
+    photos = ItemPhotoSerializer(source='itemphoto_set', many=True, read_only=True)
 
     class Meta:
         model = Item

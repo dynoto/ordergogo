@@ -8,6 +8,8 @@ urlpatterns = patterns('',
     url(r'^track/([\d\w]{0,64})/$', views.OrderTrack.as_view()),
     url(r'^item/$', views.ItemList.as_view()),
     url(r'^item/([0-9]+)/$', views.ItemDetail.as_view()),
+    url(r'^item/([0-9]+)/photo/$', views.PhotoList.as_view()),
+    url(r'^item/([0-9]+)/photo/([0-9]+)$', views.PhotoList.as_view()),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
