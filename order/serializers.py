@@ -5,6 +5,9 @@ from rest_framework import serializers
 from order.models import Order, OrderItem, Item, ItemPhoto
 
 class ItemPhotoSerializer(DynamicFieldsModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(read_only=True)
+    item = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = ItemPhoto
         field = ('photo','caption','id')

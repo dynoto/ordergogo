@@ -117,13 +117,9 @@ class PhotoList(GenericList):
 
         
         if item.owner == request.user:
-            
-            request.data['item'] = item.id
-            request.data['owner']= request.user.id
-
             serializedItemPhoto = self.ModelSerializer(data=request.data)
             if serializedItemPhoto.is_valid():
-                serializedItemPhoto.save()        
+                serializedItemPhoto.save(item=item, owner=item.owner)        
                 return Response(serializedItemPhoto.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializedItemPhoto.errors, status=status.HTTP_400_BAD_REQUEST)
