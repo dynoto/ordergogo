@@ -14,7 +14,7 @@ server {
     }
 
     location /static/  {
-        alias "/opt/ordergogo/static";
+        alias "/opt/ordergogo/static/";
     }
 
     location / {
