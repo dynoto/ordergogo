@@ -3,7 +3,7 @@ from django.db import models
 from generic.models import GenericModel
 
 def generate_photo_name(self, filename):
-        url = "media/item/%s/%s%s" % (self.item.id, randrange(100000,999999), filename)
+        url = "media/item/%s/%s%s" % (self.item.id, randrange(100000,9999999), filename[-5:])
         return url
 # Create your models here.
 class Order(GenericModel):
@@ -39,7 +39,7 @@ class ItemPhoto(GenericModel):
 
     item        = models.ForeignKey('order.Item')
     caption     = models.CharField(max_length=254, default='', blank=True)
-    photo       = models.ImageField(upload_to=generate_photo_name, null=True)
+    photo       = models.ImageField(upload_to=generate_photo_name)
     owner       = models.ForeignKey('member.Member', related_name='item_photo_owner', on_delete=models.PROTECT)
 
 class OrderItem(GenericModel):

@@ -47,7 +47,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 @admin.register(ItemPhoto)
 class ItemPhotoAdmin(admin.ModelAdmin):
-    list_display = ('item','caption','created_at','updated_at')
+    list_display = ('id','item','photo','caption','created_at','updated_at')
     exclude = ('owner',)
 
     def get_queryset(self, request):

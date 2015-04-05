@@ -53,7 +53,7 @@ class OrderDetail(APIView):
             serializedOrder = OrderReadSerializer(order)
             return Response(serializedOrder.data)
         except:
-            return Response({'message':'You are not authorized to modify this order'})
+            return Response({'message':'You are not authorized to modify this order'},status=status.HTTP_401_UNAUTHORIZED)
 
 class OrderAssign(APIView):
     def post(self, request, order_id, format=None):
@@ -106,9 +106,27 @@ class ItemDetail(GenericDetails):
 class PhotoList(GenericList):
     Model = ItemPhoto
     ModelSerializer = ItemPhotoSerializer
-    parser_classes = (MultiPartParser,)
+    # parser_classes = (MultiPartParser,)
 
     def post(self, request, item_id, format=None):
-        item = Item.objects.get(owner=request.user, id=item_id)
+        # CONTENT-TYPE : multipart/form-data; boundary=----
+        try:
+            item = Item.objects.get(owner=request.user, id=item_id)
+        except:
+            raise Http404
+
+        
+        if item.owner == request.user:
+            request.data['item'] = item.id
+            request.data['owner']= item.owner.id
+
+            serializedItemPhoto = self.ModelSerializer(data=request.data)
+            if serializedItemPhoto.is_valid():
+                serializedItemPhoto.save()        
+                return Response(serializedItemPhoto.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializedItemPhoto.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message':'You are not authorized to modify this order'}, status=status.HTTP_401_UNAUTHORIZED)
 
 # class PhotoDetails(APIView):
