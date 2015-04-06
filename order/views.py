@@ -1,9 +1,9 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser
-from order.models import Order, Item, ItemPhoto
-from order.serializers import OrderSerializer, OrderReadSerializer, ItemSerializer, OrderItemSerializer, ItemPhotoSerializer
+# from rest_framework.parsers import MultiPartParser
+from order.models import Order, Item, ItemPhoto, OrderStatus, ServiceType
+from order.serializers import OrderSerializer, OrderReadSerializer, ItemSerializer, OrderItemSerializer, ItemPhotoSerializer, ServiceTypeSerializer, OrderStatusSerializer
 from django.core.cache import cache
 from django.http import Http404
 
@@ -15,7 +15,7 @@ class OrderList(APIView):
     def get(self, request, format=None):
         orders = Order.objects.filter(owner=request.user)
         orders, count = GenericUtils.paginator(orders, request.QUERY_PARAMS.get('page'))
-        serializedItems = OrderReadSerializer(orders, many=True, exclude=('location_from','location_to','items'))
+        serializedItems = OrderReadSerializer(orders, many=True, exclude=('items','owner','assigned_to'))
         return Response({'orders':serializedItems.data, 'count':count})
 
     def post(self, request, format=None):
@@ -126,4 +126,14 @@ class PhotoList(GenericList):
         else:
             return Response({'message':'You are not authorized to modify this order'}, status=status.HTTP_401_UNAUTHORIZED)
 
-# class PhotoDetails(APIView):
+class ServiceTypeList(APIView):
+    def get(self, request, format=None):
+        objects = ServiceType.objects.all()
+        serializedObjects = ServiceTypeSerializer(objects, many=True, exclude=('owner',))
+        return Response({'service_types':serializedObjects.data})
+
+class OrderStatusList(APIView):
+    def get(self, request, format=None):
+        objects = OrderStatus.objects.all()
+        serializedObjects = OrderStatusSerializer(objects, many=True, exclude=('owner',))
+        return Response({'order_statuses':serializedObjects.data})

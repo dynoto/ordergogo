@@ -1,5 +1,5 @@
 from django.contrib import admin
-from order.models import Order, OrderItem, Item, ItemPhoto
+from order.models import Order, OrderItem, OrderStatus, ServiceType, Item, ItemPhoto
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
 
@@ -43,6 +43,14 @@ class ItemAdmin(admin.ModelAdmin):
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('order','item','order_price','quantity','remarks')
+
+@admin.register(OrderStatus)
+class OrderStatusAdmin(admin.ModelAdmin):
+    list_display = ('id','title')
+
+@admin.register(ServiceType)
+class ServiceTypeAdmin(admin.ModelAdmin):
+    list_display = ('id','title')
 
 
 @admin.register(ItemPhoto)
