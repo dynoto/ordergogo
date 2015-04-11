@@ -2,3 +2,4 @@ location/migrations
 order/migrations
 media
 member/migrations
+*/migrations

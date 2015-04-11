@@ -47,8 +47,8 @@ class OrderItemSerializer(DynamicFieldsModelSerializer):
 
 class OrderSerializer(DynamicFieldsModelSerializer):
     items   = OrderItemSerializer(source='orderitem_set', many=True, read_only=True)
-    service = serializers.SlugRelatedField(read_only=True, slug_field='title')
-    status  = serializers.SlugRelatedField(read_only=True, slug_field='title')
+    service = serializers.StringRelatedField(read_only=True)
+    status  = serializers.SlugRelatedField(queryset=OrderStatus.objects.all(),slug_field='title')
 
     class Meta:
         model = Order

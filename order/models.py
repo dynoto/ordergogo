@@ -1,12 +1,21 @@
 from random import randrange
 from django.db import models
 from generic.models import GenericModel
+from django.http import Http404
 from django.utils.translation import gettext as _
 
 def generate_photo_name(self, filename):
         url = "media/item/%s/%s%s" % (self.item.id, randrange(100000,9999999), filename[-5:])
         return url
 # Create your models here.
+
+class OrderManager(models.Manager):
+    def get_assigned_order(self, user, order_id):
+        try:
+            return Order.objects.get(assigned_to=user, id=order_id)
+        except:
+            raise Http404
+
 class Order(GenericModel):
     def __str__(self):
         return "%s" %(self.title)
@@ -26,8 +35,7 @@ class Order(GenericModel):
     tracking_id = models.CharField(max_length=64, blank=True)
     owner       = models.ForeignKey('member.Member', related_name='order_owner', on_delete=models.PROTECT)
     items       = models.ManyToManyField('order.Item', through='order.OrderItem')
-
-
+    objects     = OrderManager()
 
 class Item(GenericModel):
     def __str__(self):
@@ -68,3 +76,7 @@ class ServiceType(GenericModel):
         return "%s" %(self.title)
     title       = models.CharField(max_length=64)
     owner       = models.ForeignKey('member.Member', related_name='order_type_owner', on_delete=models.PROTECT)
+
+class OrderReject(GenericModel):
+    class Meta:
+        verbose_name_plural = _('Order Rejections')

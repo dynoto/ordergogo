@@ -13,47 +13,69 @@ from generic.views import GenericList, GenericDetails
 # Create your views here.
 class OrderList(APIView):
     def get(self, request, format=None):
-        orders = Order.objects.filter(owner=request.user)
+        orders = Order.objects.filter(assigned_to=request.user)
         orders, count = GenericUtils.paginator(orders, request.QUERY_PARAMS.get('page'))
-        serializedItems = OrderReadSerializer(orders, many=True, exclude=('items','owner','assigned_to'))
+        serializedItems = OrderReadSerializer(orders, many=True, exclude=('items','owner','assigned_to','location_from'))
         return Response({'orders':serializedItems.data, 'count':count})
+        
 
-    def post(self, request, format=None):
-        request.data['owner'] = request.user.id
-        serializedOrderItemList = []
-        for item in request.data['items']:
-            serializedOrderItem = OrderItemSerializer(data=item)
-            if serializedOrderItem.is_valid():
-                serializedOrderItemList.append(serializedOrderItem)
-            else:
-                return Response({'message':'An error has happened while doing data validation', 'errors':serializedOrderItem.errors}, status=status.HTTP_400_BAD_REQUEST)
+    # def post(self, request, format=None):
+    #     request.data['owner'] = request.user.id
+    #     serializedOrderItemList = []
+    #     for item in request.data['items']:
+    #         serializedOrderItem = OrderItemSerializer(data=item)
+    #         if serializedOrderItem.is_valid():
+    #             serializedOrderItemList.append(serializedOrderItem)
+    #         else:
+    #             return Response({'message':'An error has happened while doing data validation', 'errors':serializedOrderItem.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializedOrder = OrderSerializer(data=request.data)
-        if serializedOrder.is_valid():
-            order = serializedOrder.save()
-            for serializedOrderItem in serializedOrderItemList:
-                serializedOrderItem.save(order=order)
+    #     serializedOrder = OrderSerializer(data=request.data)
+    #     if serializedOrder.is_valid():
+    #         order = serializedOrder.save()
+    #         for serializedOrderItem in serializedOrderItemList:
+    #             serializedOrderItem.save(order=order)
 
 
-            return Response({'message':'Order have been successfully created'}, status=status.HTTP_201_CREATED)
-        return Response({'message':'An error has happened while doing data validation', 'errors':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)
+    #         return Response({'message':'Order have been successfully created'}, status=status.HTTP_201_CREATED)
+    #     return Response({'message':'An error has happened while doing data validation', 'errors':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
 class OrderDetail(APIView):
-    def get_object(self, user, Order_id):
-        try:
-            return Order.objects.get(owner=user, id=Order_id)
-        except:
-            raise Http404
-
     def get(self, request, order_id, format=None):
         try:
-            order = Order.objects.get(owner=request.user, id=order_id)
+            order = Order.objects.get_assigned_order(request.user, order_id)
             serializedOrder = OrderReadSerializer(order)
             return Response(serializedOrder.data)
         except:
             return Response({'message':'You are not authorized to modify this order'},status=status.HTTP_401_UNAUTHORIZED)
+
+class OrderStatusChange(APIView):
+    def put(self, request, order_id, format=None):
+        try:
+            order = Order.objects.get_assigned_order(request.user, order_id)
+        except:
+            return Response({'message':'You are not authorized to modify this order'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializedOrder = OrderSerializer(order, data=request.data, exclude=('location_to','owner','location_from','title','items','service','description','remarks'))
+        if serializedOrder.is_valid():
+            serializedOrder.save()
+            return Response(serializedOrder.data)
+        return Response(serializedOrder.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderReject(APIView):
+    def put(self, request, order_id, format=None):
+        try:
+            order = Order.objects.get_assigned_order(request.user, order_id)
+        except:
+            return Response({'message':'You are not authorized to modify this order'}, status=status.HTTP_400_BAD_REQUEST)
+
+        order.assigned_to = None
+        try:
+            order.save()
+            return Response({'message':'Reject order success'})
+        except:
+            return Response({'message':'Something is wrong when cancelling order'}, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderAssign(APIView):
     def post(self, request, order_id, format=None):
@@ -77,7 +99,7 @@ class OrderTrack(APIView):
         gps_position = cache.get(tracking_id)
         return Response(gps_position)
 
-    def post(self, request, tracking_id, format=None):
+    def put(self, request, tracking_id, format=None):
         cache.set(tracking_id,request.data['gps_position'])
         return Response({'message':'Driver position updated'})
 
@@ -101,6 +123,15 @@ class ItemList(GenericList):
 class ItemDetail(GenericDetails):
     Model = Item
     ModelSerializer = ItemSerializer
+
+    def get_object(self, user, model_id):
+        try:
+            return self.Model.objects.get(assigned_to=user, id=model_id)
+        except:
+            raise Http404
+
+    def delete(self, request, model_id, format=None):
+        return Response({'error':'You cannot delete this item'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PhotoList(GenericList):

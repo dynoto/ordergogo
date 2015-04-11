@@ -42,7 +42,14 @@ class MemberCreationForm(forms.ModelForm):
 
 class MemberAdmin(UserAdmin):
     add_form = MemberCreationForm
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name','phone','mobile','fax','photo')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                       'groups', 'user_permissions')}),
+        # (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
 
-    list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'date_joined', 'is_staff','photo','updated_at')
+    list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff','photo','phone','mobile','fax','updated_at','date_joined')
 
 admin.site.register(Member, MemberAdmin)
