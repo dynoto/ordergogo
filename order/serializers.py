@@ -53,6 +53,7 @@ class OrderSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Order
         field = (Order._meta.get_all_field_names())
+        exclude = ('description','created_at','updated_at')
 
 class OrderReadSerializer(OrderSerializer):
     location_from = AddressSerializer()

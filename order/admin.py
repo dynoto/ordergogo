@@ -12,7 +12,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('id','title','owner','assigned_to','created_at','updated_at')
     inlines = [OrderItemInline]
 
-    exclude = ('owner',)
+    exclude = ('owner','description')
 
     def get_queryset(self, request):
         qs = super(OrderAdmin, self).get_queryset(request)

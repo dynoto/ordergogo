@@ -10,6 +10,7 @@ class AddressSerializer(GeoModelSerializer):
         model = Address
         geo_field = "gps_location"
         field = (Address._meta.get_all_field_names())
+        exclude = ('created_at','updated_at','owner')
 
 
 
