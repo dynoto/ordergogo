@@ -154,21 +154,10 @@ LOGGING = {
             'filename': 'logs/dev.log',
             'formatter': 'verbose'
         },
-        'agoda': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'logs/agoda.log',
-            'formatter': 'verbose'
-        },
     },
     'loggers': {
         'dev': {
             'handlers': ['dev'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'agoda': {
-            'handlers': ['agoda'],
             'level': 'DEBUG',
             'propagate': True,
         },
@@ -199,4 +188,4 @@ CACHES = {
     }
 }
 
-MEDIA_URL = '/'
+MEDIA_URL = 'http://127.0.0.1:11111/'

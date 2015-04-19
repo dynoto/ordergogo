@@ -27,15 +27,16 @@ class Login(ObtainAuthToken):
         serializer = AuthTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+
+        serializedMember = MemberSerializer(user)
         token, created = Token.objects.get_or_create(user=user)
         if not created:
             token.created = datetime.utcnow().replace(tzinfo=pytz.utc)
             token.save()
 
-        return Response({'token': token.key})
+        return Response({'token': token.key,'message':'Login Successful','user':serializedMember.data})
 
 class Profile(APIView):
     def get(self, request):
         serializedMember = MemberSerializer(request.user)
         return Response(serializedMember.data)
-

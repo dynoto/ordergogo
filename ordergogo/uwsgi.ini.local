@@ -16,6 +16,7 @@ master          = true
 processes       = 10
 # the socket (use the full path to be safe
 socket          = /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi.sock
+touch-reload    = /Users/ddante/GDrive/Projects/OGG/ordergogo/uwsgi-reload
 # ... with appropriate permissions - may be needed
 # chmod-socket    = 664
 # clear environment on exit

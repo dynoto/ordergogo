@@ -25,6 +25,9 @@ class Member(AbstractUser):
         return str(self.username)
 
     photo       = models.ImageField(upload_to=generate_photo_name, null=True)
+    phone       = models.CharField(max_length=64, blank=True)
+    mobile      = models.CharField(max_length=64, blank=True)
+    fax         = models.CharField(max_length=64, blank=True)
 
     # is_authenticated = models.BooleanField(default=False)
     created_at  = models.DateTimeField(auto_now_add=True)

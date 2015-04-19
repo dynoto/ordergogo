@@ -1,5 +1,5 @@
 from django.contrib import admin
-from order.models import Order, OrderItem, Item, ItemPhoto
+from order.models import Order, OrderItem, OrderStatus, ServiceType, Item, ItemPhoto
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
 
@@ -12,7 +12,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('id','title','owner','assigned_to','created_at','updated_at')
     inlines = [OrderItemInline]
 
-    exclude = ('owner',)
+    exclude = ('owner','description')
 
     def get_queryset(self, request):
         qs = super(OrderAdmin, self).get_queryset(request)
@@ -44,10 +44,18 @@ class ItemAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('order','item','order_price','quantity','remarks')
 
+@admin.register(OrderStatus)
+class OrderStatusAdmin(admin.ModelAdmin):
+    list_display = ('id','title')
+
+@admin.register(ServiceType)
+class ServiceTypeAdmin(admin.ModelAdmin):
+    list_display = ('id','title')
+
 
 @admin.register(ItemPhoto)
 class ItemPhotoAdmin(admin.ModelAdmin):
-    list_display = ('item','caption','created_at','updated_at')
+    list_display = ('id','item','photo','caption','created_at','updated_at')
     exclude = ('owner',)
 
     def get_queryset(self, request):
