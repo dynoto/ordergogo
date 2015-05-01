@@ -7,7 +7,7 @@ from django.http import Http404
 
 import generic.utils as GenericUtils
 from generic.views import GenericDetails
-# from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.geos import GEOSGeometry
 
 class AddressList(APIView):
     def get(self, request, format=None):
@@ -19,10 +19,10 @@ class AddressList(APIView):
     def post(self, request, format=None):
         serializedAddress = AddressSerializer(data=request.data)
         if serializedAddress.is_valid():
-            # gps_data = request.data['gps_location']
-            # gps_location = GEOSGeometry('POINT(%s %s)' % (gps_data['lat'], gps_data['lon']))
+            gps_data = request.data['gps_location']
+            gps_location = GEOSGeometry('POINT(%s %s)' % (gps_data['lat'], gps_data['lon']))
 
-            serializedAddress.save(owner=request.user)
+            serializedAddress.save(owner=request.user,gps_location=gps_location)
             return Response(serializedAddress.data, status=status.HTTP_201_CREATED)
         return Response(serializedAddress.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -42,3 +42,7 @@ class AddressDetail(GenericDetails):
             return Response(serializedAddress.data)
         return Response(serializedAddress.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, address_id, format=None):
+        address = self.get_object(request.user, address_id)
+        address.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

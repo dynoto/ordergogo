@@ -43,8 +43,9 @@ class Company(GenericModel):
     def __str__(self):
         return str(self.name)
 
-    name = models.CharField(max_length=192)
+    name        = models.CharField(max_length=192)
     description = models.TextField(blank=True)
+    staffs      = models.ManyToManyField('member.Member', through='member.CompanyStaff')
 
 class CompanyStaff(GenericModel):
     class Meta:

@@ -7,19 +7,20 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 # from member.models import Member
-from member.serializers import MemberSerializer
+from member.serializers import MemberSerializer, MemberCategorySerializer
 from datetime import datetime
+from django.http import Http404
 import pytz
 
-# Create your views here.
-# class Register(APIView):
-#     permission_classes = (AllowAny,)
-#     def post(self, request, format=None):
-#         serializedMember = MemberSerializer(data=request.data)
-#         if serializedMember.is_valid():
-#             serializedMember.save()
-#             return Response(serializedMember.data, status=status.HTTP_201_CREATED)
-#         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
+#Create your views here.
+class MemberRegister(APIView):
+    permission_classes = (AllowAny,)
+    def post(self, request, format=None):
+        serializedMember = MemberSerializer(data=request.data)
+        if serializedMember.is_valid():
+            serializedMember.save()
+            return Response(serializedMember.data, status=status.HTTP_201_CREATED)
+        return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Login(ObtainAuthToken):
     # to add expiring auth token
@@ -36,7 +37,45 @@ class Login(ObtainAuthToken):
 
         return Response({'token': token.key,'message':'Login Successful','user':serializedMember.data})
 
-class Profile(APIView):
+class MemberDetail(APIView):
     def get(self, request):
         serializedMember = MemberSerializer(request.user)
         return Response(serializedMember.data)
+
+    def put(self, request):
+        serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('photo','categories'))
+        if serializedMember.is_valid():
+            serializedMember.save()
+            return Response(serializedMember.data, status=status.HTTP_200_CREATED)
+        return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MemberPhoto(APIView):
+    def post(self, request):
+        serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','photo','phone','mobile','fax','categories'))
+        if serializedMember.is_valid():
+            serializedMember.save()
+            return Response(serializedMember.data, status=status.HTTP_200_CREATED)
+        return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MemberCategory(APIView):
+    def get(self, request):
+        categories = MemberCategory.objects.filter(member=request.user)
+        serializedMemberCategory = MemberCategorySerializer(categories, exclude=('member'))
+
+        return Response(serializedMemberCategory.data)
+
+    def post(self, request):
+        serializedMemberCategory = MemberCategorySerializer(data=request.data, exclude=('member'))
+        if serializedMemberCategory.is_valid():
+            serializedMemberCategory.save()
+            return Response(serializedMemberCategory.data, status=status.HTTP_200_CREATED)
+        return Response(serializedMemberCategory.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, mc_id):
+        try:
+            mc = MemberCategory.objects.get(id=mc_id, member=request.user)
+        except:
+            raise Http404
+
+        mc.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
