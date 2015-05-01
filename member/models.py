@@ -28,6 +28,7 @@ class Member(AbstractUser):
     phone       = models.CharField(max_length=64, blank=True)
     mobile      = models.CharField(max_length=64, blank=True)
     fax         = models.CharField(max_length=64, blank=True)
+    categories  = models.ManyToManyField('generic.ServiceCategory', through='member.MemberServiceCategory')
 
     # is_authenticated = models.BooleanField(default=False)
     created_at  = models.DateTimeField(auto_now_add=True)
@@ -55,3 +56,11 @@ class CompanyStaff(GenericModel):
 
     company = models.ForeignKey('member.Company')
     member  = models.ForeignKey('member.Member')
+
+class MemberCategory(GenericModel):
+    class Meta:
+        unique_together = ('member','category')
+
+    member      = models.ForeignKey('member.Member')
+    category    = models.ForeignKey('generic.Category', related_name='member_category')
+    verified    = models.BooleanField(default=False)

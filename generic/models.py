@@ -7,3 +7,10 @@ class GenericModel(models.Model):
 
     created_at  = models.DateTimeField(auto_now_add=True)
     updated_at  = models.DateTimeField(auto_now=True)
+
+class Category(GenericModel):
+    def __str__(self):
+        return "%s" %(self.title)
+        
+    title       = models.CharField(max_length=64)
+    description = models.TextField(blank=True)

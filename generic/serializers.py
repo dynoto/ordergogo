@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from generic.models import Category
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
     """
@@ -19,3 +20,8 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
             # existing = set(self.fields.keys())
             for field_name in exclusion:
                 self.fields.pop(field_name)
+
+class CategorySerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Category
+        field = ('title','description')
