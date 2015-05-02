@@ -1,14 +1,13 @@
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
 from order import views
+from django.conf.urls import include
 
 urlpatterns = patterns('',
     url(r'^$', views.OrderList.as_view()),
-    url(r'^type_list/$', views.ServiceTypeList.as_view()),
-    url(r'^status_list/$', views.OrderStatusList.as_view()),
     url(r'^([0-9]+)/$', views.OrderDetail.as_view()),
-    url(r'^([0-9]+)/bid/$', views.OrderBid.as_view()),
     url(r'^([0-9]+)/assign/$', views.OrderAssign.as_view()),
+    url(r'^vendor/', include('order_vendor.urls')),
     # url(r'^([0-9]+)/reject/$', views.OrderReject.as_view()),
     # url(r'^([0-9]+)/status/$', views.OrderStatusChange.as_view()),
     # url(r'^track/([\d\w]{0,64})/$', views.OrderTrack.as_view()),

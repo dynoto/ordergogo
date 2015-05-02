@@ -14,3 +14,4 @@ class Category(GenericModel):
         
     title       = models.CharField(max_length=64)
     description = models.TextField(blank=True)
+    deleted     = models.BooleanField(default=False)
