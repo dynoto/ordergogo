@@ -12,7 +12,7 @@ class Address(models.Model):
     def __str__(self):
         return "%s %s" %(self.address_line_1, self.address_line_2)
 
-    gps_location    = models.PointField(null=True)
+    gps_location    = models.PointField(null=True, blank=True)
 
     address_name    = models.CharField(max_length=255, blank=True,default="")
     address_line_1  = models.CharField(max_length=255, blank=True,default="")
@@ -31,7 +31,7 @@ class Area(models.Model):
         verbose_name_plural = _('Areas')
 
     area_name       = models.CharField(max_length=255, blank=True,default="")
-    gps_location    = models.PointField(null=True)
+    gps_location    = models.PointField(null=True, blank=True)
     objects         = models.GeoManager()
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)

@@ -13,14 +13,17 @@ from django.http import Http404
 import pytz
 
 #Create your views here.
-class MemberRegister(APIView):
+class Register(APIView):
     permission_classes = (AllowAny,)
     def post(self, request, format=None):
-        serializedMember = MemberSerializer(data=request.data)
+        serializedMember = MemberSerializer(data=request.data, exclude=('first_name','last_name','photo','phone','mobile','fax'))
+        
+        
         if serializedMember.is_valid():
             serializedMember.save()
             return Response(serializedMember.data, status=status.HTTP_201_CREATED)
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class Login(ObtainAuthToken):
     # to add expiring auth token
@@ -37,6 +40,7 @@ class Login(ObtainAuthToken):
 
         return Response({'token': token.key,'message':'Login Successful','user':serializedMember.data})
 
+
 class MemberDetail(APIView):
     def get(self, request):
         serializedMember = MemberSerializer(request.user)
@@ -49,6 +53,7 @@ class MemberDetail(APIView):
             return Response(serializedMember.data, status=status.HTTP_200_CREATED)
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class MemberPhoto(APIView):
     def post(self, request):
         serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','photo','phone','mobile','fax','categories'))
@@ -56,6 +61,7 @@ class MemberPhoto(APIView):
             serializedMember.save()
             return Response(serializedMember.data, status=status.HTTP_200_CREATED)
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class MemberCategory(APIView):
     def get(self, request):

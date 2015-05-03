@@ -3,7 +3,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from member.models import Member
+from member.models import Member, MemberCategory
+
+class MemberCategoryInline(admin.TabularInline):
+    model = MemberCategory
 
 class MemberCreationForm(forms.ModelForm):
     """
@@ -47,8 +50,9 @@ class MemberAdmin(UserAdmin):
         (_('Personal info'), {'fields': ('first_name', 'last_name','phone','mobile','fax','photo')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
-        # (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
+
+    inlines = [MemberCategoryInline]
 
     list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff','photo','phone','mobile','fax','updated_at','date_joined')
 

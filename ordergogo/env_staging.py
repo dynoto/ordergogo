@@ -29,14 +29,6 @@ DATABASES = {
     }
 }
 
-REST_FRAMEWORK = {
-'DEFAULT_AUTHENTICATION_CLASSES': (
-    ''
-),
-'DEFAULT_PERMISSION_CLASSES': (
-    'tourist.permissions.TouristToken',
-)}
-
 # CELERY SETTINGS
 # APP name to distinguish when using the same broker
 STARHUB_CELERY_APP_NAME = 'starthub_conexus_staging'

@@ -4,7 +4,7 @@ from django.conf.urls import patterns, url
 from member import views
 
 urlpatterns = patterns('',
-    # url(r'^register/$', views.Register.as_view()),
+    url(r'^register/$', views.Register.as_view()),
     url(r'^login/$', views.Login.as_view()),
     url(r'^member/$', views.MemberDetail.as_view()),
     url(r'^member/photo/$', views.MemberPhoto.as_view()),

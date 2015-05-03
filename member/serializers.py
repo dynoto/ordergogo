@@ -15,5 +15,5 @@ class MemberSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = Member
-        exclude = ('id','password','is_superuser','is_staff','is_active','groups','user_permissions','last_login','date_joined','created_at','updated_at')
-        field = ('first_name','last_name','username','email','photo','phone','mobile','fax')
+        exclude = ('id','is_superuser','is_staff','is_active','groups','user_permissions','last_login','date_joined','created_at','updated_at')
+        field = ('first_name','last_name','username','email','photo','phone','mobile','fax','password')

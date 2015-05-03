@@ -5214,3 +5214,12 @@ Traceback (most recent call last):
   File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/defaulttags.py", line 1163, in load
     (taglib, e))
 TemplateSyntaxError: 'suit_tags' is not a valid tag library: ImportError raised loading suit.templatetags.suit_tags: cannot import name VERSION
+[03/May/2015 20:44:25] ERROR [django.contrib.gis:45] Error creating geometry from value '' (String or unicode input unrecognized as WKT EWKT, and HEXEWKB.) 
+
+[03/May/2015 21:07:53] ERROR [django.request:256] Internal Server Error: /member/register 
+Traceback (most recent call last):
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 108, in get_response
+    response = middleware_method(request)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/middleware/common.py", line 84, in process_request
+    "settings.") % (new_url[0], new_url[1]))
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/member/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.

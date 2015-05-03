@@ -1,16 +1,9 @@
 from random import randrange
 from generic.models import GenericModel
-from django.db import models, IntegrityError
+from django.db import models
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
-# from django.db.models.signals import pre_save
-# from django.dispatch import receiver
 
-# from os import urandom
-# from binascii import hexlify
-# from django.utils.timezone import utc
-# from django.conf import settings
-# import datetime
 def generate_photo_name(self, filename):
         url = "media/item/%s/%s%s" % (self.id, randrange(100000,999999), filename)
         return url
@@ -24,7 +17,7 @@ class Member(AbstractUser):
     def __str__(self):
         return str(self.username)
 
-    photo       = models.ImageField(upload_to=generate_photo_name, null=True)
+    photo       = models.ImageField(upload_to=generate_photo_name, null=True, blank=True)
     phone       = models.CharField(max_length=64, blank=True)
     mobile      = models.CharField(max_length=64, blank=True)
     fax         = models.CharField(max_length=64, blank=True)
@@ -48,6 +41,7 @@ class Company(GenericModel):
     description = models.TextField(blank=True)
     staffs      = models.ManyToManyField('member.Member', through='member.CompanyStaff')
 
+
 class CompanyStaff(GenericModel):
     class Meta:
         verbose_name = _('Company')
@@ -58,6 +52,7 @@ class CompanyStaff(GenericModel):
 
     company = models.ForeignKey('member.Company')
     member  = models.ForeignKey('member.Member')
+
 
 class MemberCategory(GenericModel):
     class Meta:

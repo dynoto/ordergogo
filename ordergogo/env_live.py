@@ -29,14 +29,6 @@ DATABASES = {
     }
 }
 
-REST_FRAMEWORK = {
-'DEFAULT_AUTHENTICATION_CLASSES': (
-    ''
-),
-'DEFAULT_PERMISSION_CLASSES': (
-    'tourist.permissions.TouristToken',
-)}
-
 # Add secure flag for session on live server
 SESSION_COOKIE_SECURE = True
 
