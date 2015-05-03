@@ -5016,3 +5016,36 @@ Traceback (most recent call last):
   File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/json/encoder.py", line 270, in iterencode
     return _iterencode(o, 0)
 TypeError: keys must be a string
+[03/May/2015 19:48:06] ERROR [django.request:231] Internal Server Error: /admin/login/ 
+Traceback (most recent call last):
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/core/handlers/base.py", line 137, in get_response
+    response = response.render()
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/response.py", line 103, in render
+    self.content = self.rendered_content
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/response.py", line 78, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/response.py", line 56, in resolve_template
+    return loader.get_template(template)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/loader.py", line 144, in get_template
+    template, origin = find_template(template_name, dirs)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/loader.py", line 132, in find_template
+    source, display_name = loader(name, dirs)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/loader.py", line 44, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/loader.py", line 50, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/loader.py", line 156, in get_template_from_string
+    return Template(source, origin, name)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/base.py", line 132, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/base.py", line 162, in compile_string
+    return parser.parse()
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/base.py", line 290, in parse
+    compiled_result = compile_func(self, token)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/loader_tags.py", line 201, in do_extends
+    nodelist = parser.parse()
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/base.py", line 290, in parse
+    compiled_result = compile_func(self, token)
+  File "/Users/ddante/GDrive/Projects/OGG/venv/lib/python2.7/site-packages/django/template/defaulttags.py", line 1119, in load
+    (taglib, e))
+TemplateSyntaxError: 'suit_tags' is not a valid tag library: ImportError raised loading suit.templatetags.suit_tags: cannot import name VERSION
