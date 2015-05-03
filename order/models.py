@@ -10,6 +10,9 @@ def generate_photo_name(self, filename):
         url = "media/item/%s/%s%s" % (self.item.id, randrange(100000,9999999), filename[-5:])
         return url
 
+def generate_long_order_id():
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))
+
 # Create your models here.
 
 class OrderManager(models.Manager):
@@ -50,7 +53,7 @@ class Order(GenericModel):
     preferred_time      = models.DateTimeField(null=True, blank=True)
     location_from       = models.ForeignKey('order.OrderLocation', blank=True, null=True, related_name='order_location_from')
     location_to         = models.ForeignKey('order.OrderLocation', blank=True, null=True, related_name='order_location_to')
-    tracking_id = models.CharField(max_length=64, default=(lambda:''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))))
+    tracking_id = models.CharField(max_length=64, default=generate_long_order_id())
     owner       = models.ForeignKey('member.Member', related_name='order_owner', on_delete=models.PROTECT)
     assigned_to = models.ForeignKey('member.Member', blank=True, null=True, on_delete=models.PROTECT, related_name='order_assigned_to')
     objects     = OrderManager()
@@ -63,7 +66,7 @@ class OrderBid(GenericModel):
     class Meta:
         unique_together = ('order','owner')
 
-    order       = models.ForeignKey('order.Order', related_name='order_bid')
-    owner       = models.ForeignKey('member.Member', related_name='order_owner')
+    order       = models.ForeignKey('order.Order', related_name='order_bid_order')
+    owner       = models.ForeignKey('member.Member', related_name='order_bid_owner')
     remarks     = models.CharField(blank=True, max_length=254)
     accepted    = models.BooleanField(default=False)

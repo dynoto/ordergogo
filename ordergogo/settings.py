@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'location',
     'order',
     'member',
+    'generic',
     'corsheaders',
     'axes',
 )

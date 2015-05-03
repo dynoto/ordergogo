@@ -32523,3 +32523,43 @@ TypeError: keys must be a string
 
 [30/Mar/2015 23:51:16] DEBUG [django.db.backends:91] (0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=() 
 
+[03/May/2015 18:07:23] DEBUG [django.db.backends:91] (0.000) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:08:19] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:09:07] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:09:37] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:09:53] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:10:24] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:11:04] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:11:10] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:11:42] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:12:38] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:13:38] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:14:08] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:14:18] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:17:24] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:17:49] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:17:54] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:19:13] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:19:31] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:19:38] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+
+[03/May/2015 18:19:40] DEBUG [django.db.backends:91] (0.002) SELECT postgis_lib_version(); args=None 
+

@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from rest_framework.urlpatterns import format_suffix_patterns
+# from rest_framework.urlpatterns import format_suffix_patterns
 from location import views
 
 urlpatterns = patterns('',
@@ -7,4 +7,4 @@ urlpatterns = patterns('',
     url(r'^address/([0-9]+)/$', views.AddressDetail.as_view()),
 )
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+# urlpatterns = format_suffix_patterns(urlpatterns)

@@ -28,7 +28,7 @@ class Member(AbstractUser):
     phone       = models.CharField(max_length=64, blank=True)
     mobile      = models.CharField(max_length=64, blank=True)
     fax         = models.CharField(max_length=64, blank=True)
-    categories  = models.ManyToManyField('generic.ServiceCategory', through='member.MemberServiceCategory')
+    categories  = models.ManyToManyField('generic.Category', through='member.MemberCategory')
     is_vendor   = models.BooleanField(default=False)
 
     # is_authenticated = models.BooleanField(default=False)
