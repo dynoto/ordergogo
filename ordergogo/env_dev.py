@@ -11,9 +11,6 @@ DATABASES = {
         'USER'      : 'ogg_user',
         'PASSWORD'  : 'password1',
         'HOST'      : '127.0.0.1',
-        'OPTIONS'   : {
-            'autocommit' : True,
-        }
     },
 }
 
