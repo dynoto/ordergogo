@@ -6,27 +6,43 @@ from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-# from member.models import Member
-from member.serializers import MemberSerializer, MemberCategorySerializer
+from member.models import Member, MemberCategory
+from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer
 from datetime import datetime
 from django.http import Http404
 import pytz
 
 #Create your views here.
 class Register(APIView):
+    authentication_classes = ()
     permission_classes = (AllowAny,)
     def post(self, request, format=None):
-        serializedMember = MemberSerializer(data=request.data, exclude=('first_name','last_name','photo','phone','mobile','fax'))
-        
-        
+        serializedMember = MemberRegisterSerializer(data=request.data)
         if serializedMember.is_valid():
-            serializedMember.save()
+            if request.data['password'] != request.data['password2']:
+                return Response({"password":["The field password and password2 does not match"]}, status=status.HTTP_400_BAD_REQUEST)
+
+            member = Member.objects.create_user(
+                email    = serializedMember.initial_data['email'],
+                username = serializedMember.initial_data['username'],
+                password = serializedMember.initial_data['password'],
+                is_vendor= serializedMember.initial_data['is_vendor'],
+                last_login = datetime.now()
+
+                )
+            
+            serializedMember = MemberSerializer(member)
+
             return Response(serializedMember.data, status=status.HTTP_201_CREATED)
+
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Login(ObtainAuthToken):
     # to add expiring auth token
+    authentication_classes = ()
+    permission_classes = (AllowAny,)
+    
     def post(self, request):
         serializer = AuthTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -54,7 +70,7 @@ class MemberDetail(APIView):
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MemberPhoto(APIView):
+class MemberPhotoList(APIView):
     def post(self, request):
         serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','photo','phone','mobile','fax','categories'))
         if serializedMember.is_valid():
@@ -63,15 +79,15 @@ class MemberPhoto(APIView):
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MemberCategory(APIView):
+class MemberCategoryList(APIView):
     def get(self, request):
         categories = MemberCategory.objects.filter(member=request.user)
-        serializedMemberCategory = MemberCategorySerializer(categories, exclude=('member'))
+        serializedMemberCategory = MemberCategorySerializer(categories, many=True)
 
         return Response(serializedMemberCategory.data)
 
     def post(self, request):
-        serializedMemberCategory = MemberCategorySerializer(data=request.data, exclude=('member'))
+        serializedMemberCategory = MemberCategorySerializer(data=request.data)
         if serializedMemberCategory.is_valid():
             serializedMemberCategory.save()
             return Response(serializedMemberCategory.data, status=status.HTTP_200_CREATED)

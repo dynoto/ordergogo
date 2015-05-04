@@ -4,24 +4,27 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import generic.utils as GenericUtils
 from django.http import Http404
+from generic.models import Category
+from generic.serializers import CategorySerializer
 
 # Create your views here.
-def get_object(self, user, item_id):
-        try:
-            return Item.objects.get(owner=user, id=item_id)
-        except:
-            raise Http404
 
 class GenericList(APIView):
     Model = None
     ModelSerializer = None
 
+    def get_objects(self, request):
+        return self.Model.objects.all()
+
     def get(self, request, format=None):
-        objects = self.Model.objects.filter(owner=request.user)
+        objects = self.get_objects(request)
         objects, count = GenericUtils.paginator(objects, request.QUERY_PARAMS.get('page'))
         serializedObjects = self.ModelSerializer(objects, many=True)
         return Response({self.Model._meta.verbose_name_plural.title():serializedObjects.data, 'count':count})
 
+class GenericListOwner(GenericList):
+    def get_objects(self, request):
+        return self.Model.objects.filter(owner=request.user)
 
 class GenericDetails(APIView):
     Model = None
@@ -47,3 +50,8 @@ class GenericDetails(APIView):
         except:
             return Response({'error':'%s cannot be deleted because it is still associated with other objects' %(self.Model.__name__)}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class CategoryList(GenericList):
+    Model = Category
+    ModelSerializer = CategorySerializer

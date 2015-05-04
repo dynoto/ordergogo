@@ -54,6 +54,6 @@ class MemberAdmin(UserAdmin):
 
     inlines = [MemberCategoryInline]
 
-    list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff','photo','phone','mobile','fax','updated_at','date_joined')
+    list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff','is_superuser','photo','phone','mobile','fax','updated_at','date_joined')
 
 admin.site.register(Member, MemberAdmin)

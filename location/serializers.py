@@ -9,7 +9,7 @@ class AddressSerializer(GeoModelSerializer):
     class Meta:
         model = Address
         geo_field = "gps_location"
-        field = (Address._meta.get_all_field_names())
+        fields = (Address._meta.get_all_field_names())
         exclude = ('created_at','updated_at','owner')
 
 
@@ -20,5 +20,5 @@ class AreaSerializer(GeoModelSerializer):
     class Meta:
         model = Area
         geo_field = "gps_location"
-        field = (Area._meta.get_all_field_names())
+        fields = (Area._meta.get_all_field_names())
 

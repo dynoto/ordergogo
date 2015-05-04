@@ -6,8 +6,8 @@ from member import views
 urlpatterns = patterns('',
     url(r'^register/$', views.Register.as_view()),
     url(r'^login/$', views.Login.as_view()),
-    url(r'^member/$', views.MemberDetail.as_view()),
-    url(r'^member/photo/$', views.MemberPhoto.as_view()),
-    url(r'^member/category/$', views.MemberCategory.as_view()),
-    url(r'^member/category/([0-9]+)/$', views.MemberCategory.as_view()),
+    url(r'^$', views.MemberDetail.as_view()),
+    url(r'^photo/$', views.MemberPhotoList.as_view()),
+    url(r'^category/$', views.MemberCategoryList.as_view()),
+    url(r'^category/([0-9]+)/$', views.MemberCategoryList.as_view()),
 )

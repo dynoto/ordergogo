@@ -24,4 +24,4 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 class CategorySerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Category
-        field = ('title','description')
+        fields = ('id','title','description')
