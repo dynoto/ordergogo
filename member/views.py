@@ -33,7 +33,7 @@ class Register(APIView):
             
             serializedMember = MemberSerializer(member)
 
-            return Response(serializedMember.data, status=status.HTTP_201_CREATED)
+            return Response({'user':serializedMember.data}, status=status.HTTP_201_CREATED)
 
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -60,13 +60,13 @@ class Login(ObtainAuthToken):
 class MemberDetail(APIView):
     def get(self, request):
         serializedMember = MemberSerializer(request.user)
-        return Response(serializedMember.data)
+        return Response({'user':serializedMember.data})
 
     def put(self, request):
-        serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('photo','categories'))
+        serializedMember = MemberSerializer(request.user ,data=request.data, partial=True)
         if serializedMember.is_valid():
             serializedMember.save()
-            return Response(serializedMember.data, status=status.HTTP_200_CREATED)
+            return Response({'user':serializedMember.data})
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -75,7 +75,7 @@ class MemberPhotoList(APIView):
         serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','photo','phone','mobile','fax','categories'))
         if serializedMember.is_valid():
             serializedMember.save()
-            return Response(serializedMember.data, status=status.HTTP_200_CREATED)
+            return Response({'user':serializedMember.data}, status=status.HTTP_200_CREATED)
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -84,14 +84,12 @@ class MemberCategoryList(APIView):
         categories = MemberCategory.objects.filter(member=request.user)
         serializedMemberCategory = MemberCategorySerializer(categories, many=True)
 
-        return Response(serializedMemberCategory.data)
+        return Response({'categories':serializedMemberCategory.data})
 
-    def post(self, request):
-        serializedMemberCategory = MemberCategorySerializer(data=request.data)
-        if serializedMemberCategory.is_valid():
-            serializedMemberCategory.save()
-            return Response(serializedMemberCategory.data, status=status.HTTP_200_CREATED)
-        return Response(serializedMemberCategory.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, mc_id):
+        mc, created = MemberCategory.objects.get_or_create(category=mc_id, member=request.user)
+        serializedMemberCategory = MemberCategorySerializer(mc)
+        return Response(serializedMemberCategory.data)
 
     def delete(self, request, mc_id):
         try:

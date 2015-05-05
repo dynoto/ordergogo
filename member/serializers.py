@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
+from rest_framework.validators import UniqueTogetherValidator
 from generic.serializers import DynamicFieldsModelSerializer, CategorySerializer
 from member.models import Member, MemberCategory
 
@@ -10,6 +10,9 @@ class MemberCategorySerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = MemberCategory
         fields = ('category','verified')
+        extra_kwargs = {
+            'member':{'required':False,'read_only':True}
+        }
 
 class MemberSerializer(DynamicFieldsModelSerializer):
     categories = MemberCategorySerializer(source='membercategory_set', many=True, read_only=True)
@@ -17,11 +20,12 @@ class MemberSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = Member
-        exclude = ('id','password2','last_login','date_joined','is_staff','is_superuser','groups','user_permissions')
+        fields = ('email','username','first_name','last_name','password','password2','is_vendor','is_active','phone','mobile','fax','categories','created_at','updated_at')
         extra_kwargs = {
             'email':{'required':True},
             'username':{'read_only':True},
             'password':{'write_only':True},
+            'is_vendor':{'read_only':True},
         }
 
 class MemberRegisterSerializer(MemberSerializer):
@@ -29,3 +33,9 @@ class MemberRegisterSerializer(MemberSerializer):
     class Meta:
         model = Member
         fields = ('username','email','password','password2','is_vendor')
+        extra_kwargs = {
+            'email':{'required':True},
+            'username':{'required':True},
+            'password':{'required':True},
+            'is_vendor':{'required':True},
+        }
