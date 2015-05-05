@@ -2,24 +2,23 @@ from generic.serializers import DynamicFieldsModelSerializer, CategorySerializer
 from member.serializers import MemberSerializer
 from location.serializers import AddressSerializer
 from rest_framework import serializers
-from order.models import Order, OrderLocation, OrderBid
+from order.models import Order, OrderAddress, OrderBid
 
-class OrderLocationSerializer(AddressSerializer):
+class OrderAddressSerializer(AddressSerializer):
     class Meta:
-        model = OrderLocation
-        fields = (OrderLocation._meta.get_all_field_names())
+        model = OrderAddress
+        fields = (OrderAddress._meta.get_all_field_names())
 
 class OrderSerializer(DynamicFieldsModelSerializer):
     category    = CategorySerializer()
-    location_from = OrderLocationSerializer
-    location_to = OrderLocationSerializer
+    location_from = OrderAddressSerializer()
+    location_to = OrderAddressSerializer()
     tracking_id = serializers.CharField(read_only=True)
     status      = serializers.CharField(read_only=True)
 
     class Meta:
         model = Order
-        fields = (Order._meta.get_all_field_names())
-        exclude = ('description')
+        fields = ('title','description','category','status','preferred_time','location_from','location_to','tracking_id','assigned_to','owner')
 
 class OrderCategorySerializer(OrderSerializer):
     class Meta:

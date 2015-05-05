@@ -15,7 +15,7 @@ class Address(models.Model):
     gps_location    = models.PointField(null=True, blank=True)
 
     address_name    = models.CharField(max_length=255, blank=True,default="")
-    address_line_1  = models.CharField(max_length=255, blank=True,default="")
+    address_line_1  = models.CharField(max_length=255)
     address_line_2  = models.CharField(max_length=255, blank=True,default="")
     postal_code     = models.CharField(max_length=255, blank=True,default="")
 

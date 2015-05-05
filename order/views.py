@@ -13,7 +13,7 @@ from generic.views import GenericList, GenericDetails
 # Create your views here.
 class OrderList(APIView):
     def get(self, request, format=None):
-        orders = Order.objects.filter(assigned_to=request.user)
+        orders = Order.objects.filter(owner=request.user)
         orders, count = GenericUtils.paginator(orders, request.QUERY_PARAMS.get('page'))
         serializedItems = OrderReadSerializer(orders, many=True, exclude=('owner','assigned_to'))
         return Response({'orders':serializedItems.data, 'count':count})

@@ -10,6 +10,7 @@ from member.models import Member, MemberCategory
 from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer
 from datetime import datetime
 from django.http import Http404
+from django.db import IntegrityError
 import pytz
 
 #Create your views here.
@@ -86,10 +87,17 @@ class MemberCategoryList(APIView):
 
         return Response({'categories':serializedMemberCategory.data})
 
+
+class MemberCategoryDetail(APIView):
     def post(self, request, mc_id):
-        mc, created = MemberCategory.objects.get_or_create(category=mc_id, member=request.user)
-        serializedMemberCategory = MemberCategorySerializer(mc)
-        return Response(serializedMemberCategory.data)
+        try:
+            MemberCategory.objects.create(category_id=mc_id, member=request.user)
+        except ValueError:
+            return Response({'error':'No such category'})
+        except IntegrityError:
+            return Response({'error':'Category already been associated with member'})
+        
+        return Response({'message':'Category has been added to the member'})
 
     def delete(self, request, mc_id):
         try:
@@ -98,4 +106,4 @@ class MemberCategoryList(APIView):
             raise Http404
 
         mc.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'message':'Category has been deleted from member'},status=status.HTTP_204_NO_CONTENT)

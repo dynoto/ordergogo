@@ -47,20 +47,19 @@ class Order(GenericModel):
 
     title       = models.CharField(max_length=64)
     description = models.TextField(blank=True)
-    remarks     = models.TextField(blank=True)
     category    = models.ForeignKey('generic.Category', related_name='order_category')
     status      = models.CharField(max_length=4, choices=ORDER_STATUS_TYPES ,default=PENDING)
     preferred_time      = models.DateTimeField(null=True, blank=True)
-    location_from       = models.ForeignKey('order.OrderLocation', blank=True, null=True, related_name='order_location_from')
-    location_to         = models.ForeignKey('order.OrderLocation', blank=True, null=True, related_name='order_location_to')
+    location_from       = models.ForeignKey('order.OrderAddress', blank=True, null=True, related_name='order_address_from')
+    location_to         = models.ForeignKey('order.OrderAddress', blank=True, null=True, related_name='order_address_to')
     tracking_id = models.CharField(max_length=64, default=generate_long_order_id())
     owner       = models.ForeignKey('member.Member', related_name='order_owner', on_delete=models.PROTECT)
     assigned_to = models.ForeignKey('member.Member', blank=True, null=True, on_delete=models.PROTECT, related_name='order_assigned_to')
     objects     = OrderManager()
 
 # this model is created
-class OrderLocation(Address):
-    order       = models.ForeignKey('order.Order', related_name='order_location')
+class OrderAddress(Address):
+    order       = models.ForeignKey('order.Order', related_name='order_address')
 
 class OrderBid(GenericModel):
     class Meta:

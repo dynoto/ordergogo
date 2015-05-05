@@ -6,43 +6,44 @@ from location.serializers import AddressSerializer
 from django.http import Http404
 
 import generic.utils as GenericUtils
-from generic.views import GenericDetails
+from generic.views import GenericDetails, GenericListOwner, GenericList
 from django.contrib.gis.geos import GEOSGeometry
 
-class AddressList(APIView):
-    def get(self, request, format=None):
-        addresses = Address.objects.filter(owner=request.user)
-        addresses, count = GenericUtils.paginator(addresses, request.QUERY_PARAMS.get('page'))
-        serializedAddresses = AddressSerializer(addresses, many=True)
-        return Response({'addresses':serializedAddresses.data, 'count':count})
+class MemberAddressList(GenericListOwner):
+    Model = Address
+    ModelSerializer = AddressSerializer
 
     def post(self, request, format=None):
         serializedAddress = AddressSerializer(data=request.data)
         if serializedAddress.is_valid():
-            gps_data = request.data['gps_location']
-            gps_location = GEOSGeometry('POINT(%s %s)' % (gps_data['lat'], gps_data['lon']))
-
-            serializedAddress.save(owner=request.user,gps_location=gps_location)
+            serializedAddress.save(owner=request.user)
             return Response(serializedAddress.data, status=status.HTTP_201_CREATED)
+
         return Response(serializedAddress.errors, status=status.HTTP_400_BAD_REQUEST)
 
         
 
 
-class AddressDetail(GenericDetails):
+class MemberAddressDetail(GenericDetails):
     Model = Address
     ModelSerializer = AddressSerializer
 
     def put(self, request, address_id, format=None):
         address = self.get_object(request.user, address_id)
 
-        serializedAddress = AddressSerializer(address, data=request.data)
+        serializedAddress = AddressSerializer(address, data=request.data, partial=True)
         if serializedAddress.is_valid():
             serializedAddress.save(owner=request.user)
             return Response(serializedAddress.data)
+
         return Response(serializedAddress.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, address_id, format=None):
         address = self.get_object(request.user, address_id)
         address.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'message':'Address successfully deleted'},status=status.HTTP_204_NO_CONTENT)
+
+
+# class AreaList(GenericList):
+#     Model = Area
+#     ModelSerializer = AreaSerializer

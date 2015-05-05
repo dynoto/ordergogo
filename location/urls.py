@@ -3,8 +3,8 @@ from django.conf.urls import patterns, url
 from location import views
 
 urlpatterns = patterns('',
-    url(r'^address/$', views.AddressList.as_view()),
-    url(r'^address/([0-9]+)/$', views.AddressDetail.as_view()),
+    # url(r'^address/$', views.AddressList.as_view()),
+    # url(r'^address/([0-9]+)/$', views.AddressDetail.as_view()),
+    # url(r'^area/$', views.AreaList.as_view()),
+    # url(r'^area/([0-9]+)/$', views.AreaDetail.as_view()),
 )
-
-# urlpatterns = format_suffix_patterns(urlpatterns)
