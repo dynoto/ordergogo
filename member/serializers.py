@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from generic.serializers import DynamicFieldsModelSerializer, CategorySerializer
-from member.models import Member, MemberCategory
+from member.models import Member, MemberCategory, MemberVerification
 
 class MemberCategorySerializer(DynamicFieldsModelSerializer):
     category = CategorySerializer()

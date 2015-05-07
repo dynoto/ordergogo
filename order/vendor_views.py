@@ -12,7 +12,7 @@ from generic.views import GenericList, GenericDetails
 
 class OrderPendingList(APIView):
     def get_orders(user):
-        return Order.objects.filter(category=user.category, assigned_to=None)
+        return Order.objects.filter(category=user.categories, assigned_to=None)
 
     def get(self, request, format=None):
         orders = self.get_orders(request.user)

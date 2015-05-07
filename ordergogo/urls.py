@@ -5,11 +5,9 @@ from rest_framework.urlpatterns import format_suffix_patterns
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'ordergogo.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
     url(r'^member/', include('member.urls')),
-    url(r'^order/', include('order.urls')),
+    url(r'^order/customer/', include('order.urls')),
+    url(r'^order/vendor/', include('order.vendor_urls')),
     url(r'^location/', include('location.urls')),
     url(r'^generic/', include('generic.urls')),
     url(r'^admin/', include(admin.site.urls)),

@@ -31,6 +31,8 @@ class Register(APIView):
                 last_login = datetime.now()
 
                 )
+
+            hooio_url = "https://secure.hoiio.com/open/sms/send?dest=%2B6596541924&sender_name=PIKA&msg=PIKACHU+please+response!&access_token=b7GlIeggXZQOYCJJ&app_id=j4wwJjlFrcYb9gsB"
             
             serializedMember = MemberSerializer(member)
 
@@ -56,6 +58,13 @@ class Login(ObtainAuthToken):
             token.save()
 
         return Response({'token': token.key,'message':'Login Successful','user':serializedMember.data})
+
+class Verification(APIView):
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        pass
 
 
 class MemberDetail(APIView):

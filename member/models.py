@@ -5,8 +5,8 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 
 def generate_photo_name(self, filename):
-        url = "media/item/%s/%s%s" % (self.id, randrange(100000,999999), filename)
-        return url
+    url = "media/item/%s/%s%s" % (self.id, randrange(100000,999999), filename)
+    return url
 
 # Create your models here.
 class Member(AbstractUser):
@@ -27,7 +27,6 @@ class Member(AbstractUser):
     # is_authenticated = models.BooleanField(default=False)
     created_at  = models.DateTimeField(auto_now_add=True)
     updated_at  = models.DateTimeField(auto_now=True)
-
 
 class Company(GenericModel):
     class Meta:
@@ -61,3 +60,7 @@ class MemberCategory(GenericModel):
     member      = models.ForeignKey('member.Member')
     category    = models.ForeignKey('generic.Category', related_name='member_category')
     verified    = models.BooleanField(default=False)
+
+class MemberVerification(GenericModel):
+    member          = models.OneToOneField('member.Member')
+    verification    = models.CharField(max_length=16, default=randrange(100000,999999))

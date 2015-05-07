@@ -4,16 +4,16 @@ from rest_framework.response import Response
 # from rest_framework.parsers import MultiPartParser
 from order.models import Order, OrderBid
 from order.serializers import OrderSerializer, OrderReadSerializer, OrderBidSerializer, OrderAssignSerializer
-from django.core.cache import cache
+# from django.core.cache import cache
 from django.http import Http404
 
 import generic.utils as GenericUtils
-from generic.views import GenericList, GenericDetails
+# from generic.views import GenericList, GenericDetails
 
 # Create your views here.
 class OrderList(APIView):
     def get(self, request, format=None):
-        orders = Order.objects.filter(owner=request.user)
+        orders = Order.objects.filter(owner=request.user, deleted=False)
         orders, count = GenericUtils.paginator(orders, request.QUERY_PARAMS.get('page'))
         serializedItems = OrderReadSerializer(orders, many=True, exclude=('owner','assigned_to'))
         return Response({'orders':serializedItems.data, 'count':count})
@@ -31,7 +31,7 @@ class OrderList(APIView):
 class OrderDetail(APIView):
     def get_object(order_id, owner):
         try:
-            return Order.objects.get(id=order_id, owner=owner)
+            return Order.objects.get(id=order_id, owner=owner, deleted=False)
         except:
             return Http404
 
@@ -52,7 +52,8 @@ class OrderDetail(APIView):
 
     def delete(self, request, order_id):
         order = self.get_object(order_id, request.user)
-        order.delete()
+        order.deleted = True
+        order.save()
         return Response({'message':'Order have been successfully deleted'}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -60,7 +61,7 @@ class OrderDetail(APIView):
 class OrderAssign(APIView):
     def get_order(id, owner):
         try:
-            return Order.objects.get(id=id, owner=owner)
+            return Order.objects.get(id=id, owner=owner, deleted=False)
         except:
             raise Http404
 

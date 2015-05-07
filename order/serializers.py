@@ -2,23 +2,21 @@ from generic.serializers import DynamicFieldsModelSerializer, CategorySerializer
 from member.serializers import MemberSerializer
 from location.serializers import AddressSerializer
 from rest_framework import serializers
-from order.models import Order, OrderAddress, OrderBid
-
-class OrderAddressSerializer(AddressSerializer):
-    class Meta:
-        model = OrderAddress
-        fields = (OrderAddress._meta.get_all_field_names())
+from order.models import Order, OrderBid
 
 class OrderSerializer(DynamicFieldsModelSerializer):
-    category    = CategorySerializer()
-    location_from = OrderAddressSerializer()
-    location_to = OrderAddressSerializer()
-    tracking_id = serializers.CharField(read_only=True)
-    status      = serializers.CharField(read_only=True)
-
     class Meta:
         model = Order
-        fields = ('title','description','category','status','preferred_time','location_from','location_to','tracking_id','assigned_to','owner')
+        fields = ('title','description','category','status','preferred_time','location_from','tracking_id','assigned_to','owner')
+        extra_kwargs = {
+            'status' : {'read_only':True},
+            'tracking_id' : {'read_only':True},
+            'deleted' : {'read_only':True}
+        }
+
+class OrderReadSerializer(OrderSerializer):
+    category    = CategorySerializer(read_only=True)
+    location_from = AddressSerializer(read_only=True)
 
 class OrderCategorySerializer(OrderSerializer):
     class Meta:
@@ -29,8 +27,6 @@ class OrderAssignSerializer(OrderSerializer):
         fields = ('assigned_to',)
 
 class OrderReadSerializer(OrderSerializer):
-    location_from = AddressSerializer()
-    location_to = AddressSerializer()
     owner = MemberSerializer()
     assigned_to = MemberSerializer()
 

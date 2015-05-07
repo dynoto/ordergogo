@@ -40,7 +40,8 @@ class MemberAddressDetail(GenericDetails):
 
     def delete(self, request, address_id, format=None):
         address = self.get_object(request.user, address_id)
-        address.delete()
+        address.deleted = True
+        address.save()
         return Response({'message':'Address successfully deleted'},status=status.HTTP_204_NO_CONTENT)
 
 
