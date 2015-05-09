@@ -12,13 +12,12 @@ class OrderAddressSerializer(AddressSerializer):
 class OrderSerializer(DynamicFieldsModelSerializer):
     category    = CategorySerializer()
     location_from = OrderAddressSerializer()
-    location_to = OrderAddressSerializer()
     tracking_id = serializers.CharField(read_only=True)
     status      = serializers.CharField(read_only=True)
 
     class Meta:
         model = Order
-        fields = ('title','description','category','status','preferred_time','location_from','location_to','tracking_id','assigned_to','owner')
+        fields = ('title','description','category','status','preferred_time','location_from','tracking_id','assigned_to','owner')
 
 class OrderCategorySerializer(OrderSerializer):
     class Meta:

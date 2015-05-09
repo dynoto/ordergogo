@@ -57,8 +57,8 @@ class Order(GenericModel):
     objects             = OrderManager()
 
 # # this model is created
-# class OrderAddress(Address):
-#     order       = models.ForeignKey('order.Order', related_name='order_address')
+class OrderAddress(Address):
+    order       = models.ForeignKey('order.Order', related_name='order_address')
 
 class OrderBid(GenericModel):
     class Meta:
