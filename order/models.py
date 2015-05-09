@@ -52,7 +52,7 @@ class Order(GenericModel):
     category            = models.ForeignKey('generic.Category', related_name='order_category')
     status              = models.CharField(max_length=4, choices=ORDER_STATUS_TYPES ,default=PENDING)
     preferred_time      = models.DateTimeField(null=True, blank=True)
-    location_from       = models.ForeignKey('location.Address', blank=True, null=True, related_name='order_address_from')
+    location_from       = models.ForeignKey('order.OrderAddress', blank=True, null=True, related_name='order_address_from')
     tracking_id         = models.CharField(max_length=64, default=generate_long_order_id)
     owner               = models.ForeignKey('member.Member', related_name='order_owner', on_delete=models.PROTECT)
     assigned_to         = models.ForeignKey('member.Member', blank=True, null=True, on_delete=models.PROTECT, related_name='order_assigned_to')
@@ -69,5 +69,6 @@ class OrderBid(GenericModel):
 
     order       = models.ForeignKey('order.Order', related_name='order_bid_order')
     owner       = models.ForeignKey('member.Member', related_name='order_bid_owner')
+    price       = models.DecimalField(max_digits=6, decimal_places=2)
     remarks     = models.CharField(blank=True, max_length=254)
     accepted    = models.BooleanField(default=False)

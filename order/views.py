@@ -28,17 +28,17 @@ class OrderList(APIView):
 
 
 class OrderDetail(APIView):
-    def get_object(order_id, owner):
+    def get_object(self, order_id, owner):
         try:
             return Order.objects.get(id=order_id, owner=owner, deleted=False)
         except:
-            return Http404
+            raise Http404
 
 
     def get(self, request, order_id, format=None):
-        order = self.get_object(id=order_id, owner=request.user)
+        order = self.get_object(order_id, request.user)
         serializedOrder = OrderReadSerializer(order)
-        return Response(serializedOrder.data)
+        return Response({'order':serializedOrder.data})
 
     def put(self, request, order_id, format=None):
         order = self.get_object(id=order_id, owner=request.user)

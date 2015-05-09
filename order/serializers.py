@@ -33,10 +33,12 @@ class OrderAssignSerializer(OrderSerializer):
         fields = ('assigned_to',)
 
 class OrderReadSerializer(OrderSerializer):
-    owner = MemberSerializer()
-    assigned_to = MemberSerializer()
+    owner = MemberSerializer(exclude=('categories',))
+    category = CategorySerializer()
+    assigned_to = MemberSerializer(exclude=('categories',))
 
 class OrderBidSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = OrderBid
-        fields = ('order','owner','remarks','accepted')
+        fields = ('order','owner','price','remarks','accepted')
+        read_only_fields = ('accepted',)

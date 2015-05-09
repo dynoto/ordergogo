@@ -52,6 +52,12 @@ class CompanyStaff(GenericModel):
     company = models.ForeignKey('member.Company')
     member  = models.ForeignKey('member.Member')
 
+class MemberCategoryManager(models.Manager):
+    use_for_related_fields = True
+
+    def get_queryset(self):
+        return super(MemberCategoryManager, self).get_queryset().filter(verified=True)
+
 
 class MemberCategory(GenericModel):
     class Meta:
@@ -60,6 +66,9 @@ class MemberCategory(GenericModel):
     member      = models.ForeignKey('member.Member')
     category    = models.ForeignKey('generic.Category', related_name='member_category')
     verified    = models.BooleanField(default=False)
+
+    objects = MemberCategoryManager()
+
 
 class MemberVerification(GenericModel):
     member          = models.OneToOneField('member.Member')
