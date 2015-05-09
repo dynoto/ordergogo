@@ -1,4 +1,5 @@
-import random,string
+import string, random, time
+from uuid import uuid4, uuid1
 from random import randrange
 from django.db import models
 from generic.models import GenericModel
@@ -12,6 +13,7 @@ def generate_photo_name(self, filename):
 
 def generate_long_order_id():
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))
+
 
 # Create your models here.
 
@@ -51,14 +53,15 @@ class Order(GenericModel):
     status              = models.CharField(max_length=4, choices=ORDER_STATUS_TYPES ,default=PENDING)
     preferred_time      = models.DateTimeField(null=True, blank=True)
     location_from       = models.ForeignKey('location.Address', blank=True, null=True, related_name='order_address_from')
-    tracking_id         = models.CharField(max_length=64, default=generate_long_order_id())
+    tracking_id         = models.CharField(max_length=64, default=generate_long_order_id)
     owner               = models.ForeignKey('member.Member', related_name='order_owner', on_delete=models.PROTECT)
     assigned_to         = models.ForeignKey('member.Member', blank=True, null=True, on_delete=models.PROTECT, related_name='order_assigned_to')
     objects             = OrderManager()
 
 # # this model is created
 class OrderAddress(Address):
-    order       = models.ForeignKey('order.Order', related_name='order_address')
+    pass
+    # order       = models.ForeignKey('order.Order', related_name='order_address', blank=True, null=True)
 
 class OrderBid(GenericModel):
     class Meta:

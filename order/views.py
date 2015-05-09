@@ -15,7 +15,7 @@ class OrderList(APIView):
     def get(self, request, format=None):
         orders = Order.objects.filter(owner=request.user, deleted=False)
         orders, count = GenericUtils.paginator(orders, request.QUERY_PARAMS.get('page'))
-        serializedItems = OrderReadSerializer(orders, many=True, exclude=('owner','assigned_to'))
+        serializedItems = OrderReadSerializer(orders, many=True, exclude=('owner',))
         return Response({'orders':serializedItems.data, 'count':count})
         
 
@@ -23,9 +23,8 @@ class OrderList(APIView):
         serializedOrder = OrderSerializer(data=request.data,exclude=('status','owner','assigned_to'))
         if serializedOrder.is_valid():
             serializedOrder.save(owner=request.user)
-            return Response({'message':'Order have been successfully created'}, status=status.HTTP_201_CREATED)
+            return Response({'message':'Order have been successfully created','order':serializedOrder.data}, status=status.HTTP_201_CREATED)
         return Response({'message':'An error has happened while doing data validation', 'errors':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class OrderDetail(APIView):

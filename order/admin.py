@@ -7,6 +7,6 @@ from order.models import Order
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id','title','owner','assigned_to','created_at','updated_at')
+    list_display = ('id','category','title','owner','location_from','preferred_time','assigned_to','tracking_id','created_at','updated_at')
 
     exclude = ('status',)

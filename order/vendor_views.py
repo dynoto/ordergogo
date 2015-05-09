@@ -17,7 +17,7 @@ class OrderPendingList(APIView):
     def get(self, request, format=None):
         orders = self.get_orders(request.user)
         orders, count = GenericUtils.paginator(orders, request.QUERY_PARAMS.get('page'))
-        serializedItems = OrderReadSerializer(orders, many=True)
+        serializedItems = OrderReadSerializer(orders, many=True, exclude=('assigned_to',))
         return Response({'orders':serializedItems.data, 'count':count})
 
 class OrderAssignedList(OrderPendingList):

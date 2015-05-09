@@ -7,35 +7,36 @@ from order.models import Order, OrderAddress, OrderBid
 class OrderAddressSerializer(AddressSerializer):
     class Meta:
         model = OrderAddress
-        fields = (OrderAddress._meta.get_all_field_names())
+        fields = ('address_name','gps_location','address_line_1','address_line_2','postal_code','area')
 
 class OrderSerializer(DynamicFieldsModelSerializer):
-    category    = CategorySerializer()
     location_from = OrderAddressSerializer()
-    tracking_id = serializers.CharField(read_only=True)
-    status      = serializers.CharField(read_only=True)
 
     class Meta:
         model = Order
-        fields = ('title','description','category','status','preferred_time','location_from','tracking_id','assigned_to','owner')
+        fields = ('id','title','description','category','status','preferred_time','location_from','tracking_id','owner','assigned_to')
+        read_only_fields = ('tracking_id','status','owner','assigned_to')
 
-class OrderCategorySerializer(OrderSerializer):
-    class Meta:
-        fields = ('category',)
+    def create(self, validated_data):
+        order_address = validated_data.pop('location_from')
+        order_address['owner'] = validated_data['owner']
+        order_address = OrderAddress.objects.create(**order_address)
+
+        validated_data['location_from'] = order_address
+        return Order.objects.create(**validated_data)
+        # order.location_from = order_address
+        # order.save()
+
 
 class OrderAssignSerializer(OrderSerializer):
     class Meta:
         fields = ('assigned_to',)
 
 class OrderReadSerializer(OrderSerializer):
-    location_from = AddressSerializer()
-    location_to = AddressSerializer()
     owner = MemberSerializer()
     assigned_to = MemberSerializer()
 
 class OrderBidSerializer(DynamicFieldsModelSerializer):
-    # order = OrderSerializer()
-
     class Meta:
         model = OrderBid
         fields = ('order','owner','remarks','accepted')
