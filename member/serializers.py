@@ -26,9 +26,9 @@ class MemberSerializer(DynamicFieldsModelSerializer):
         fields = ('username','first_name','last_name','password','password2','is_vendor','is_active','country_code','phone','mobile','fax','categories','created_at','updated_at')
         extra_kwargs = {
             # 'email':{'required':True},
-            'password':{'write_only'},
+            'password':{'write_only':True},
             'username':{'read_only':True},
-            'is_vendor':{'read_only':True},
+            'is_vendor':{'read_only':True}
         }
 
 class MemberRegisterSerializer(MemberSerializer):
@@ -41,5 +41,5 @@ class MemberRegisterSerializer(MemberSerializer):
             'username':{'required':True},
             'is_vendor':{'required':True},
             'phone':{'required':True},
-            'country_code':{'required':True},
+            'country_code':{'required':True}
         }
