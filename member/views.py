@@ -7,7 +7,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from member.models import Member, MemberCategory
-from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer
+from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer, MemberPhotoSerializer
 from datetime import datetime
 from django.http import Http404
 from django.db import IntegrityError
@@ -61,12 +61,12 @@ class Login(ObtainAuthToken):
     permission_classes = (AllowAny,)
     
     def post(self, request):
-        # """
-        # Login user, returns token and user data
-        # ---
-        # request_serializer: rest_framework.authtoken.serializers.AuthTokenSerializer    
-        # response_serializer: member.serializers.MemberSerializer
-        # """
+        """
+        Login user, returns token and user data
+        ---
+        request_serializer: rest_framework.authtoken.serializers.AuthTokenSerializer    
+        response_serializer: member.serializers.MemberSerializer
+        """
         serializer = AuthTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -89,20 +89,20 @@ class Verification(APIView):
 
 class MemberDetail(APIView):
     def get(self, request):
-        # """
-        # Get all details for this member
-        # ---
-        # serializer: member.serializers.MemberSerializer
-        # """
+        """
+        Get all details for this member
+        ---
+        serializer: member.serializers.MemberSerializer
+        """
         serializedMember = MemberSerializer(request.user)
         return Response({'user':serializedMember.data})
 
     def put(self, request):
-        # """
-        # Modify details for currently logged in member, fields that is not included in the JSON will be left unchanged
-        # ---
-        # serializer: member.serializers.MemberSerializer
-        # """
+        """
+        Modify details for currently logged in member, fields that is not included in the JSON will be left unchanged
+        ---
+        serializer: member.serializers.MemberSerializer
+        """
 
         serializedMember = MemberSerializer(request.user ,data=request.data, partial=True)
         if serializedMember.is_valid():
@@ -113,7 +113,12 @@ class MemberDetail(APIView):
 
 class MemberPhotoList(APIView):
     def post(self, request):
-        serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','photo','phone','mobile','fax','categories'))
+        """
+        This API is used solely to upload member photos.
+        ---
+        serializer: member.serializers.MemberPhotoSerializer
+        """
+        serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','phone','mobile','fax','categories'))
         if serializedMember.is_valid():
             serializedMember.save()
             return Response({'user':serializedMember.data}, status=status.HTTP_200_CREATED)
@@ -122,6 +127,11 @@ class MemberPhotoList(APIView):
 
 class MemberCategoryList(APIView):
     def get(self, request):
+        """
+        This API is used to list out all the categories associated with this member
+        ---
+        serializer: member.serializers.MemberCategorySerializer
+        """
         categories = MemberCategory.objects.filter(member=request.user)
         serializedMemberCategory = MemberCategorySerializer(categories, many=True)
 
@@ -130,6 +140,12 @@ class MemberCategoryList(APIView):
 
 class MemberCategoryDetail(APIView):
     def post(self, request, mc_id):
+        """
+        This API is used to register the user with the category, verified is false by default until verified by the admin.
+        just need to post with the serializer and thats all.
+        ---
+        omit_serializer: true
+        """
         try:
             MemberCategory.objects.create(category_id=mc_id, member=request.user)
         except ValueError:
@@ -140,6 +156,12 @@ class MemberCategoryDetail(APIView):
         return Response({'message':'Category has been added to the member'})
 
     def delete(self, request, mc_id):
+        """
+        This API is used to delete the category associated with the member.
+        just need to post with the serializer and thats all.
+        ---
+        omit_serializer: true
+        """
         try:
             mc = MemberCategory.objects.get(id=mc_id, member=request.user)
         except:
