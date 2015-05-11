@@ -18,25 +18,39 @@ class Register(APIView):
     authentication_classes = ()
     permission_classes = (AllowAny,)
     def post(self, request, format=None):
+        """
+        Register user
+        ---
+        request_serializer: member.serializers.MemberRegisterSerializer
+        response_serializer: member.serializers.MemberSerializer
+        """
+
         serializedMember = MemberRegisterSerializer(data=request.data)
         if serializedMember.is_valid():
             if request.data['password'] != request.data['password2']:
                 return Response({"password":["The field password and password2 does not match"]}, status=status.HTTP_400_BAD_REQUEST)
 
             member = Member.objects.create_user(
-                email    = serializedMember.initial_data['email'],
+                email    = serializedMember.initial_data['username'],
                 username = serializedMember.initial_data['username'],
                 password = serializedMember.initial_data['password'],
                 is_vendor= serializedMember.initial_data['is_vendor'],
+                phone    = serializedMember.initial_data['phone'],
+                country_code = serializedMember.initial_data['country_code'],
                 last_login = datetime.now()
 
                 )
 
             hooio_url = "https://secure.hoiio.com/open/sms/send?dest=%2B6596541924&sender_name=PIKA&msg=PIKACHU+please+response!&access_token=b7GlIeggXZQOYCJJ&app_id=j4wwJjlFrcYb9gsB"
             
+            token, created = Token.objects.get_or_create(user=member)
+            if not created:
+                token.created = datetime.utcnow().replace(tzinfo=pytz.utc)
+                token.save()
+
             serializedMember = MemberSerializer(member)
 
-            return Response({'user':serializedMember.data}, status=status.HTTP_201_CREATED)
+            return Response({'token':token.key, 'user':serializedMember.data, 'message':'Register successful'}, status=status.HTTP_201_CREATED)
 
         return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -47,6 +61,12 @@ class Login(ObtainAuthToken):
     permission_classes = (AllowAny,)
     
     def post(self, request):
+        # """
+        # Login user, returns token and user data
+        # ---
+        # request_serializer: rest_framework.authtoken.serializers.AuthTokenSerializer    
+        # response_serializer: member.serializers.MemberSerializer
+        # """
         serializer = AuthTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -69,10 +89,21 @@ class Verification(APIView):
 
 class MemberDetail(APIView):
     def get(self, request):
+        # """
+        # Get all details for this member
+        # ---
+        # serializer: member.serializers.MemberSerializer
+        # """
         serializedMember = MemberSerializer(request.user)
         return Response({'user':serializedMember.data})
 
     def put(self, request):
+        # """
+        # Modify details for currently logged in member, fields that is not included in the JSON will be left unchanged
+        # ---
+        # serializer: member.serializers.MemberSerializer
+        # """
+
         serializedMember = MemberSerializer(request.user ,data=request.data, partial=True)
         if serializedMember.is_valid():
             serializedMember.save()

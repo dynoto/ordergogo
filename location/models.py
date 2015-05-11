@@ -28,16 +28,31 @@ class Address(models.Model):
 
 class Area(models.Model):
     class Meta:
-        verbose_name = _('Area')
         verbose_name_plural = _('Areas')
 
     def __str__(self):
         return self.area_name
 
-    area_name       = models.CharField(max_length=255, blank=True,default="")
+    area_name       = models.CharField(max_length=255)
+    phone_code      = models.CharField(max_length=8, blank=True,default="65")
     gps_location    = models.PointField(null=True, blank=True)
     objects         = models.GeoManager()
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
     owner           = models.ForeignKey('member.Member', related_name='area_owner', null=True, blank=True)
     deleted         = models.BooleanField(default=False)
+
+class Country(models.Model):
+    class Meta:
+        verbose_name_plural = _('Countries')
+
+    def __str__(self):
+        return self.country_name
+
+    area_name       = models.CharField(max_length=255)
+    phone_code      = models.CharField(max_length=8, blank=True,default="65")
+    gps_location    = models.PointField(null=True, blank=True)
+    objects         = models.GeoManager()
+    deleted         = models.BooleanField(default=False)
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)

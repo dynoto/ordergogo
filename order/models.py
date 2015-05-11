@@ -34,6 +34,9 @@ class Order(GenericModel):
     def __str__(self):
         return "%s" %(self.title)
 
+    def __unicode__(self):
+        return str(self.title)
+
     # PENDING = 'PD'
     # ASSIGNED = 'AG'
     # COMPLETED = 'CP'
@@ -67,6 +70,9 @@ class OrderAddress(Address):
 class OrderBid(GenericModel):
     class Meta:
         unique_together = ('order','owner')
+
+    def __unicode__(self):
+        return str("Order Bid")
 
     order       = models.ForeignKey('order.Order', related_name='order_bid_order')
     owner       = models.ForeignKey('member.Member', related_name='order_bid_owner')

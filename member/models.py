@@ -11,17 +11,22 @@ def generate_photo_name(self, filename):
 # Create your models here.
 class Member(AbstractUser):
     class Meta:
-        verbose_name = _('Member')
+        
         verbose_name_plural = _('Members')
 
     def __str__(self):
+        return str(self.username)
+
+    def __unicode__(self):
         return str(self.username)
 
     photo       = models.ImageField(upload_to=generate_photo_name, null=True, blank=True)
     phone       = models.CharField(max_length=64, blank=True)
     mobile      = models.CharField(max_length=64, blank=True)
     fax         = models.CharField(max_length=64, blank=True)
+    country_code= models.CharField(max_length=4, blank=True, default="65")
     categories  = models.ManyToManyField('generic.Category', through='member.MemberCategory')
+    country     = models.ForeignKey('location.Country', blank=True, null=True)
     is_vendor   = models.BooleanField(default=False)
 
     # is_authenticated = models.BooleanField(default=False)
@@ -34,6 +39,9 @@ class Company(GenericModel):
         verbose_name_plural = _('Companies')
 
     def __str__(self):
+        return str(self.name)
+
+    def __unicode__(self):
         return str(self.name)
 
     name        = models.CharField(max_length=192)
@@ -49,6 +57,9 @@ class CompanyStaff(GenericModel):
     def __str__(self):
         return str(self.name)
 
+    def __unicode__(self):
+        return str(self.name)
+
     company = models.ForeignKey('member.Company')
     member  = models.ForeignKey('member.Member')
 
@@ -62,6 +73,9 @@ class MemberCategoryManager(models.Manager):
 class MemberCategory(GenericModel):
     class Meta:
         unique_together = ('member','category')
+
+    def __unicode__(self):
+        return str('Member Category')
 
     member      = models.ForeignKey('member.Member')
     category    = models.ForeignKey('generic.Category', related_name='member_category')
