@@ -34,23 +34,24 @@ class Order(GenericModel):
     def __str__(self):
         return "%s" %(self.title)
 
-    PENDING = 'PD'
-    ASSIGNED = 'AG'
-    COMPLETED = 'CP'
-    CANCELLED = 'CC'
+    # PENDING = 'PD'
+    # ASSIGNED = 'AG'
+    # COMPLETED = 'CP'
+    # CANCELLED = 'CC'
 
-    ORDER_STATUS_TYPES = (
-        (PENDING,'Pending'),
-        (ASSIGNED,'Assigned'),
-        (COMPLETED,'Completed'),
-        (CANCELLED,'Cancelled'),
-    )
+    # ORDER_STATUS_TYPES = (
+    #     (PENDING,'Pending'),
+    #     (ASSIGNED,'Assigned'),
+    #     (COMPLETED,'Completed'),
+    #     (CANCELLED,'Cancelled'),
+    # )
 
 
     title               = models.CharField(max_length=64,blank=True)
     description         = models.TextField(blank=True)
     category            = models.ForeignKey('generic.Category', related_name='order_category')
-    status              = models.CharField(max_length=4, choices=ORDER_STATUS_TYPES ,default=PENDING)
+    # status              = models.CharField(max_length=4, choices=ORDER_STATUS_TYPES ,default=PENDING)
+    accepted            = models.BooleanField(default=False)
     preferred_time      = models.DateTimeField(null=True, blank=True)
     location_from       = models.ForeignKey('order.OrderAddress', blank=True, null=True, related_name='order_address_from')
     tracking_id         = models.CharField(max_length=64, default=generate_long_order_id)

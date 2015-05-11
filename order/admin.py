@@ -10,8 +10,13 @@ class OrderAddressAdmin(AddressAdmin):
 class OrderBidAdmin(admin.ModelAdmin):
     list_display = ('order','owner','price','remarks','accepted')
 
+class OrderBidInline(admin.TabularInline):
+    model = OrderBid
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id','category','title','owner','location_from','preferred_time','assigned_to','tracking_id','created_at','updated_at')
+    list_display = ('id','category','title','owner','accepted','location_from','preferred_time','assigned_to','tracking_id','created_at','updated_at')
 
     exclude = ('status',)
+    inlines = [OrderBidInline]

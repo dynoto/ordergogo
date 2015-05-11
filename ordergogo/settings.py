@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
     'location',
     'order',
     'member',
@@ -195,4 +196,7 @@ HOOIO_SENDER = 'HOHOHO SANTA CLAUS'
 HOOIO_ACCESS_TOKEN = 'b7GlIeggXZQOYCJJ'
 HOOIO_APP_ID = 'j4wwJjlFrcYb9gsB'
 
-
+SWAGGER_SETTINGS = {
+    'api_version':'0.1',
+    'doc_expansion':'list'
+}

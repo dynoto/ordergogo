@@ -58,14 +58,14 @@ class OrderDetail(APIView):
 
 
 class OrderAssign(APIView):
-    def get_order(id, owner):
+    def get_order(self, id, owner):
         try:
             return Order.objects.get(id=id, owner=owner, deleted=False)
         except:
             raise Http404
 
     def get(self, request, order_id, format=None):
-        order = self.get_order(order_id, request.owner)
+        order = self.get_order(order_id, request.user)
         bidders = OrderBid.objects.filter(order=order)
         bidders, count = GenericUtils.paginator(bidders, request.QUERY_PARAMS.get('page'))
         serializedItems = OrderBidSerializer(bidders, many=True)
@@ -73,11 +73,16 @@ class OrderAssign(APIView):
 
 
     def post(self, request, order_id, format=None):
-        order = self.get_order(order_id, request.owner)
+        order = self.get_order(order_id, request.user)
+        try:
+            request.data['assigned_to']
+        except:
+            return Response({'message':'Please assign to a vendor'}, status=status.HTTP_400_BAD_REQUEST)    
+
         serializedOrder = OrderAssignSerializer(order, data=request.data)
         if serializedOrder.is_valid():
-            serializedOrder.save()
-            message = 'Order successfully assign to : %s %s' %(order.assigned_to.first_name, order.assigned_to.last_name)
+            serializedOrder.save(accepted=True)
+            message = 'Order successfully assign to %s %s' %(order.assigned_to.first_name, order.assigned_to.last_name)
             return Response({'message':message})
 
         else:

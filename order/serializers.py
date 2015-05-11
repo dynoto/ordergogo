@@ -14,7 +14,7 @@ class OrderSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('id','title','description','category','status','preferred_time','location_from','tracking_id','owner','assigned_to')
+        fields = ('id','title','description','category','accepted','preferred_time','location_from','tracking_id','owner','assigned_to')
         read_only_fields = ('tracking_id','status','owner','assigned_to')
 
     def create(self, validated_data):
@@ -30,12 +30,14 @@ class OrderSerializer(DynamicFieldsModelSerializer):
 
 class OrderAssignSerializer(OrderSerializer):
     class Meta:
+        model = Order
         fields = ('assigned_to',)
 
 class OrderReadSerializer(OrderSerializer):
     owner = MemberSerializer(exclude=('categories',))
     category = CategorySerializer()
     assigned_to = MemberSerializer(exclude=('categories',))
+
 
 class OrderBidSerializer(DynamicFieldsModelSerializer):
     class Meta:

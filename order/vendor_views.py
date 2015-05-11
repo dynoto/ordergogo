@@ -15,7 +15,7 @@ class OrderPendingList(APIView):
     def get_orders(self, user):
         mc = MemberCategory.objects.filter(member=user, verified=True).values_list('category', flat=True)
 
-        return Order.objects.filter(category__in=mc, assigned_to=None)
+        return Order.objects.filter(category__in=mc, accepted=False)
         # return Order.objects.filter(assigned_to=None)
 
     def get(self, request, format=None):
