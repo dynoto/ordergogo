@@ -12,6 +12,11 @@ from generic.serializers import CategorySerializer
 class GenericList(APIView):
     Model = None
     ModelSerializer = None
+    swagger = {
+        'message':'',
+        'request_serializer':'',
+        'response_serializer':''
+    }
 
     def get_objects(self, request):
         return self.Model.objects.all()
@@ -55,3 +60,11 @@ class GenericDetails(APIView):
 class CategoryList(GenericList):
     Model = Category
     ModelSerializer = CategorySerializer
+    
+    def get(self, request, format=None):
+        """
+        This API is to list out all categories that is available for choosing by vendor or customer
+        ---
+        serializer: generic.serializers.CategorySerializer
+        """
+        return super(CategoryList, self).get(request)

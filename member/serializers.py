@@ -43,3 +43,8 @@ class MemberRegisterSerializer(MemberSerializer):
             'phone':{'required':True},
             'country_code':{'required':True}
         }
+
+class MemberPhotoSerializer(MemberSerializer):
+    class Meta:
+        model = Member
+        fields = ('photo',)

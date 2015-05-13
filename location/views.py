@@ -13,7 +13,22 @@ class MemberAddressList(GenericListOwner):
     Model = Address
     ModelSerializer = AddressSerializer
 
+    def get(self, request, format=None):
+        """
+        Get all addresses created by this user
+        ---
+        serializer : location.serializers.AddressSerializer
+        """
+
+        return super(MemberAddressList, self).get(request,format)
+
     def post(self, request, format=None):
+        """
+        Create a new address
+        ---
+        serializer : location.serializers.AddressSerializer
+        """
+
         serializedAddress = AddressSerializer(data=request.data)
         if serializedAddress.is_valid():
             serializedAddress.save(owner=request.user)
@@ -29,6 +44,12 @@ class MemberAddressDetail(GenericDetails):
     ModelSerializer = AddressSerializer
 
     def put(self, request, address_id, format=None):
+        """
+        Modify an address created by this user, fields that are left empty will not be modified
+        ---
+        serializer : location.serializers.AddressSerializer
+        """
+
         address = self.get_object(request.user, address_id)
 
         serializedAddress = AddressSerializer(address, data=request.data, partial=True)
@@ -39,6 +60,12 @@ class MemberAddressDetail(GenericDetails):
         return Response(serializedAddress.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, address_id, format=None):
+        """
+        Delets this address
+        ---
+        omit_serializer : true
+        """
+
         address = self.get_object(request.user, address_id)
         address.deleted = True
         address.save()
