@@ -1,3 +1,5 @@
+import requests
+from ordergogo.settings import HOOIO_SENDER, HOOIO_ACCESS_TOKEN, HOOIO_APP_ID
 from random import randrange
 from generic.models import GenericModel
 from django.db import models
@@ -21,13 +23,12 @@ class Member(AbstractUser):
         return str(self.username)
 
     photo       = models.ImageField(upload_to=generate_photo_name, null=True, blank=True)
-    phone       = models.CharField(max_length=64, blank=True)
-    mobile      = models.CharField(max_length=64, blank=True)
-    fax         = models.CharField(max_length=64, blank=True)
+    phone       = models.CharField(max_length=64, unique=True)
     country_code= models.CharField(max_length=4, blank=True, default="65")
     categories  = models.ManyToManyField('generic.Category', through='member.MemberCategory')
     country     = models.ForeignKey('location.Country', blank=True, null=True)
     is_vendor   = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
 
     # is_authenticated = models.BooleanField(default=False)
     created_at  = models.DateTimeField(auto_now_add=True)
@@ -85,5 +86,11 @@ class MemberCategory(GenericModel):
 
 
 class MemberVerification(GenericModel):
-    member          = models.OneToOneField('member.Member')
-    verification    = models.CharField(max_length=16, default=randrange(100000,999999))
+    member      = models.OneToOneField('member.Member')
+    code        = models.CharField(max_length=16, default=randrange(100000,999999))
+    verified    = models.BooleanField(default=False)
+
+    def send_code(self, country_code, phone, verification_code):
+        message = "Your verification number is %s" % (verification_code)
+        hooio_url = "https://secure.hoiio.com/open/sms/send?dest=+%s%s&sender_name=%s&msg=%s&access_token=%s&app_id=%s" % (country_code, phone, HOOIO_SENDER, message, HOOIO_ACCESS_TOKEN, HOOIO_APP_ID)
+        return requests.get(hooio_url)

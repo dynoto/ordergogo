@@ -7,6 +7,7 @@ from location import views as locationViews
 urlpatterns = patterns('',
     url(r'^register/$', views.Register.as_view()),
     url(r'^login/$', views.Login.as_view()),
+    url(r'^verify/$', views.Verify.as_view()),
     url(r'^$', views.MemberDetail.as_view()),
     url(r'^photo/$', views.MemberPhotoList.as_view()),
     url(r'^category/$', views.MemberCategoryList.as_view()),
