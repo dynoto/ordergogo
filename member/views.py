@@ -6,11 +6,13 @@ from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from member.models import Member, MemberCategory
-from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer, MemberPhotoSerializer
+from member.models import Member, MemberCategory, MemberVerification
+from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer, MemberPhotoSerializer, MemberVerificationSerializer
 from datetime import datetime
+from random import randrange
 from django.http import Http404
 from django.db import IntegrityError
+# from ordergogo.settings import HOOIO_SENDER, HOOIO_ACCESS_TOKEN, HOOIO_APP_ID
 import pytz
 
 #Create your views here.
@@ -41,8 +43,10 @@ class Register(APIView):
 
                 )
 
-            hooio_url = "https://secure.hoiio.com/open/sms/send?dest=%2B6596541924&sender_name=PIKA&msg=PIKACHU+please+response!&access_token=b7GlIeggXZQOYCJJ&app_id=j4wwJjlFrcYb9gsB"
-            
+            #SEND VERIFICATION CODE TO THE USER
+            vrf = MemberVerification.objects.create(member=member)
+            vrf.send_code(vrf.code, member.country_code, member.phone)
+
             token, created = Token.objects.get_or_create(user=member)
             if not created:
                 token.created = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -79,12 +83,54 @@ class Login(ObtainAuthToken):
 
         return Response({'token': token.key,'message':'Login Successful','user':serializedMember.data})
 
-class Verification(APIView):
+class Verify(APIView):
+    def get_object(self, member):
+        try:
+            return MemberVerification.objects.get(member=member, verified=False)
+        except:
+            raise Http404
+
     def get(self, request):
-        pass
+        """
+        Resend verification code to the registered mobile number, allow only every 5 minutes after the SMS has been successfully sent
+        ---
+        omit_serializer: true
+        """
+
+        vrf = self.get_object(request.user)
+        grace_period = datetime.now(pytz.utc) - vrf.updated_at
+        if grace_period.seconds < 300:
+            return Response({'message':'You have just request for verification code, please wait for 5 minutes before trying again'})
+
+
+        vrf.code = randrange(100000,999999)
+        response = vrf.send_code(request.user.country_code, request.user.phone, vrf.code)
+        if response.status_code == "200":
+            vrf.save()
+            return Response({'message':'Verification code has been resend, please check your mobile phone for SMS'})
+        else:
+            return Response({'message':'Something wrong when sending verification code to your number, please check if the phone number is correct and exist'})
+
+
 
     def post(self, request):
-        pass
+        """
+        Verify phone number
+        ---
+        request_serializer: member.serializers.MemberVerificationSerializer
+        """
+        vrf = self.get_object(request.user)
+
+        serializedVerification = MemberVerificationSerializer(request.data)
+        if serializedVerification.is_valid():
+            if vrf.code == serializedVerification.initial_data['code']:
+                request.user.verified = True
+                request.user.save()
+                vrf.verified = True
+                vrf.save()
+                return Response({'message':'Your account has been successfully verified!'})
+        else:
+            return Response(serializedVerification.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MemberDetail(APIView):
@@ -118,7 +164,7 @@ class MemberPhotoList(APIView):
         ---
         serializer: member.serializers.MemberPhotoSerializer
         """
-        serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','phone','mobile','fax','categories'))
+        serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','phone','categories'))
         if serializedMember.is_valid():
             serializedMember.save()
             return Response({'user':serializedMember.data}, status=status.HTTP_200_CREATED)

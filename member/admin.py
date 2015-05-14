@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from member.models import Member, MemberCategory
+from member.models import Member, MemberCategory, MemberVerification
 
 class MemberCategoryInline(admin.TabularInline):
     model = MemberCategory
@@ -47,13 +47,17 @@ class MemberAdmin(UserAdmin):
     add_form = MemberCreationForm
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name','phone','mobile','fax','photo')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name','phone','photo')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
     )
 
     inlines = [MemberCategoryInline]
 
-    list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff','is_superuser','photo','phone','mobile','fax','updated_at','date_joined')
+    list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff','is_superuser','photo','phone','updated_at','date_joined')
 
 admin.site.register(Member, MemberAdmin)
+
+@admin.register(MemberVerification)
+class MemberVerificationAdmin(admin.ModelAdmin):
+    list_display = ('id','member','code','verified','created_at','updated_at')

@@ -23,7 +23,7 @@ class MemberSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = Member
-        fields = ('username','first_name','last_name','password','password2','is_vendor','is_active','country_code','phone','mobile','fax','categories','created_at','updated_at')
+        fields = ('username','first_name','last_name','password','password2','is_vendor','is_active','country_code','phone','categories','created_at','updated_at')
         extra_kwargs = {
             # 'email':{'required':True},
             'password':{'write_only':True},
@@ -48,3 +48,9 @@ class MemberPhotoSerializer(MemberSerializer):
     class Meta:
         model = Member
         fields = ('photo',)
+
+class MemberVerificationSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = MemberVerification
+        fields = ('member','code','verified')
+        read_only_fields = ('member','verified')
