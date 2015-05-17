@@ -10,18 +10,21 @@ class Command(BaseCommand):
             username='root',
             password='root',
             email='root@beer.com',
+            phone='123'
             )
 
         bidderone = Member.objects.create_superuser(
             username='bidderone',
             password='bidderone',
             email='bidder@one.com',
+            phone='345'
             )
 
         biddertwo = Member.objects.create_superuser(
             username='biddertwo',
             password='biddertwo',
             email='bidder@two.com',
+            phone='456'
             )
 
         Token.objects.create(user=bidderone)
