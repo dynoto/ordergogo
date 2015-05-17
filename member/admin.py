@@ -48,13 +48,13 @@ class MemberAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name','phone','photo')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_verified',
                                        'groups', 'user_permissions')}),
     )
 
     inlines = [MemberCategoryInline]
 
-    list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff','is_superuser','photo','phone','updated_at','date_joined')
+    list_display = ('id', 'email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff','is_superuser','is_verified','photo','phone','updated_at','date_joined')
 
 admin.site.register(Member, MemberAdmin)
 

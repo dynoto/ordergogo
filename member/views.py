@@ -6,14 +6,15 @@ from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from member.models import Member, MemberCategory, MemberVerification
-from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer, MemberPhotoSerializer, MemberVerificationSerializer
+from member.models import Member, MemberCategory, MemberVerification, MemberReferral
+from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer, MemberPhotoSerializer, MemberVerificationSerializer, MemberReferralSerializer
+from credit.models import Credit
 from datetime import datetime
 from random import randrange
 from django.http import Http404
 from django.db import IntegrityError
 # from ordergogo.settings import HOOIO_SENDER, HOOIO_ACCESS_TOKEN, HOOIO_APP_ID
-import pytz
+import pytz,binascii,os
 
 #Create your views here.
 class Register(APIView):
@@ -32,6 +33,7 @@ class Register(APIView):
             if request.data['password'] != request.data['password2']:
                 return Response({"password":["The field password and password2 does not match"]}, status=status.HTTP_400_BAD_REQUEST)
 
+            # CREATE USER FIRST
             member = Member.objects.create_user(
                 email    = serializedMember.initial_data['username'],
                 username = serializedMember.initial_data['username'],
@@ -39,19 +41,23 @@ class Register(APIView):
                 is_vendor= serializedMember.initial_data['is_vendor'],
                 phone    = serializedMember.initial_data['phone'],
                 country_code = serializedMember.initial_data['country_code'],
+                referral = serializedMember.initial_data['referral'],
                 last_login = datetime.now()
-
                 )
 
-            #SEND VERIFICATION CODE TO THE USER
+            # CREATE CREDITS OBJECT FOR THE USER
+            credit = Credit(member=member)
+            if member.referral:
+                # NEED TO AWARD THE OTHER USER CREDITS ALSO
+                credit.credits = 1000
+            credit.save()
+
+            # SEND VERIFICATION CODE TO THE USER
             vrf = MemberVerification.objects.create(member=member)
             vrf.send_code(vrf.code, member.country_code, member.phone)
 
-            token, created = Token.objects.get_or_create(user=member)
-            if not created:
-                token.created = datetime.utcnow().replace(tzinfo=pytz.utc)
-                token.save()
-
+            # CREATE LOGIN TOKEN FOR USER
+            token = Token.objects.create(user=member)
             serializedMember = MemberSerializer(member)
 
             return Response({'token':token.key, 'user':serializedMember.data, 'message':'Register successful'}, status=status.HTTP_201_CREATED)
@@ -75,10 +81,15 @@ class Login(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
 
+        if not user.is_verified:
+            return Response({'message':'User not yet verified'},status=status.HTTP_403_FORBIDDEN)
+
         serializedMember = MemberSerializer(user)
         token, created = Token.objects.get_or_create(user=user)
         if not created:
+            token.delete()
             token.created = datetime.utcnow().replace(tzinfo=pytz.utc)
+            token.key = binascii.hexlify(os.urandom(20)).decode()
             token.save()
 
         return Response({'token': token.key,'message':'Login Successful','user':serializedMember.data})
@@ -143,6 +154,7 @@ class MemberDetail(APIView):
         serializedMember = MemberSerializer(request.user)
         return Response({'user':serializedMember.data})
 
+
     def put(self, request):
         """
         Modify details for currently logged in member, fields that is not included in the JSON will be left unchanged
@@ -164,7 +176,7 @@ class MemberPhotoList(APIView):
         ---
         serializer: member.serializers.MemberPhotoSerializer
         """
-        serializedMember = MemberSerializer(request.user ,data=request.data, exclude=('first_name','last_name','username','email','phone','categories'))
+        serializedMember = MemberPhotoSerializer(request.user ,data=request.data)
         if serializedMember.is_valid():
             serializedMember.save()
             return Response({'user':serializedMember.data}, status=status.HTTP_200_CREATED)
@@ -215,3 +227,37 @@ class MemberCategoryDetail(APIView):
 
         mc.delete()
         return Response({'message':'Category has been deleted from member'},status=status.HTTP_204_NO_CONTENT)
+
+class MemberReferralDetail(APIView):
+    def get_object(self, member):
+        try:
+            return MemberReferral.objects.get(member=member)
+        except:
+            raise Http404
+
+    def get(self, request):
+        """
+        Get current member referral code and referral count
+        ---
+        serializer : member.serializers.MemberReferralSerializer
+        """
+        ref = self.get_object(request.user)
+        serializedRef = MemberReferralSerializer(ref)
+        return Response({'referral':serializedRef.data})
+
+
+    def post(self, request):
+        """
+        Create a new referral code, if none specified then a randomized referral code will be created
+        ---
+        serializer : member.serializers.MemberReferralSerializer
+        """
+        rq = request.data
+        rq['member'] = request.user.id
+        serializedRef = MemberReferralSerializer(data=rq)
+        if serializedRef.is_valid():
+            serializedRef.save()
+            return Response({'referral':serializedRef.data,'message':'Referral code successfully created'})
+        return Response(serializedRef.errors, status=status.HTTP_400_BAD_REQUEST)
+
+

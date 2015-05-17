@@ -14,4 +14,5 @@ urlpatterns = patterns('',
     url(r'^category/([0-9]+)/$', views.MemberCategoryDetail.as_view()),
     url(r'^address/$', locationViews.MemberAddressList.as_view()),
     url(r'^address/([0-9]+)/$', locationViews.MemberAddressDetail.as_view()),
+    url(r'^referral/$', views.MemberReferralDetail.as_view()),
 )

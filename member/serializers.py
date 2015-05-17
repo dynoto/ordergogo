@@ -1,8 +1,8 @@
 from rest_framework.validators import UniqueValidator
 from rest_framework import serializers
 from generic.serializers import DynamicFieldsModelSerializer, CategorySerializer
-from location.serializers import CountrySerializer
-from member.models import Member, MemberCategory, MemberVerification
+# from location.serializers import CountrySerializer
+from member.models import Member, MemberCategory, MemberVerification, MemberReferral
 
 class MemberCategorySerializer(DynamicFieldsModelSerializer):
     category = CategorySerializer()
@@ -35,7 +35,7 @@ class MemberRegisterSerializer(MemberSerializer):
 
     class Meta:
         model = Member
-        fields = ('username','password','password2','phone','country_code','is_vendor')
+        fields = ('username','password','password2','phone','country_code','is_vendor','referral')
         extra_kwargs = {
             # 'email':{'required':True},
             'username':{'required':True},
@@ -54,3 +54,9 @@ class MemberVerificationSerializer(DynamicFieldsModelSerializer):
         model = MemberVerification
         fields = ('member','code','verified')
         read_only_fields = ('member','verified')
+
+class MemberReferralSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = MemberReferral
+        fields = ('member','code','referred')
+        read_only_fields = ('member','referred')
