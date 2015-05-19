@@ -1,1 +1,1 @@
-from ordergogo.env_staging import *
+from ordergogo.env_dev import *

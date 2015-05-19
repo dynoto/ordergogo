@@ -8,7 +8,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from member.models import Member, MemberCategory, MemberVerification, MemberReferral
 from member.serializers import MemberSerializer, MemberRegisterSerializer, MemberCategorySerializer, MemberPhotoSerializer, MemberVerificationSerializer, MemberReferralSerializer
-from credit.models import Credit
 from datetime import datetime
 from random import randrange
 from django.http import Http404
@@ -42,15 +41,10 @@ class Register(APIView):
                 phone    = serializedMember.initial_data['phone'],
                 country_code = serializedMember.initial_data['country_code'],
                 referral = serializedMember.initial_data['referral'],
+                credits  = 1000,
                 last_login = datetime.now()
                 )
 
-            # CREATE CREDITS OBJECT FOR THE USER
-            credit = Credit(member=member)
-            if member.referral:
-                # NEED TO AWARD THE OTHER USER CREDITS ALSO
-                credit.credits = 1000
-            credit.save()
 
             # SEND VERIFICATION CODE TO THE USER
             vrf = MemberVerification.objects.create(member=member)
