@@ -12,13 +12,10 @@ class TransactionSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Transaction
         fields = ('id','package','member','amount','transaction_id','is_paypal','is_google','is_apple')
-        read_only_fields = ('member','amount')
+        read_only_fields = ('member','amount','is_paypal','is_apple','is_google')
         extra_kwargs = {
             'package':{'required':True},
             'transaction_id':{'required':True},
-            'is_paypal':{'required':True},
-            'is_google':{'required':True},
-            'is_apple':{'required':True},
         }
 
 class TransactionReadSerializer(TransactionSerializer):
