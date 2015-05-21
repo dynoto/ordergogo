@@ -70,7 +70,7 @@ class OrderBidDetail(APIView):
         if serializedBid.is_valid():
             serializedBid.save(owner=request.user)
             return Response({'bid':serializedBid.data,'message':'You have successfully bid for this order'})
-        return Response({'message':'An error has happened while doing data validation', 'errors':serializedBid.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':serializedBid.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, order_id):
         #to prevent the user from entering unassigned order number we override it manually
@@ -82,7 +82,7 @@ class OrderBidDetail(APIView):
         if serializedBid.is_valid():
             serializedBid.save()
             return Response({'bid':serializedBid.data,'message':'You have successfully change bid for this order'})
-        return Response({'message':'An error has happened while doing data validation', 'errors':serializedBid.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':serializedBid.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, order_id):
         order = self.get_bid(order_id, request.user)

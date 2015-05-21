@@ -23,8 +23,8 @@ class OrderList(APIView):
         serializedOrder = OrderSerializer(data=request.data,exclude=('status','owner','assigned_to'))
         if serializedOrder.is_valid():
             serializedOrder.save(owner=request.user)
-            return Response({'message':'Order have been successfully created','order':serializedOrder.data}, status=status.HTTP_201_CREATED)
-        return Response({'message':'An error has happened while doing data validation', 'errors':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'order':serializedOrder.data}, status=status.HTTP_201_CREATED)
+        return Response({'error':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderDetail(APIView):
@@ -45,9 +45,9 @@ class OrderDetail(APIView):
         serializedOrder = OrderSerializer(order, data=request.data, exclude=('status','owner','assigned_to'))
         if serializedOrder.is_valid():
             serializedOrder.save()
-            return Response({'message':'Order have been successfully created','order':serializedOrder.data}, status=status.HTTP_200_CREATED)
+            return Response({'order':serializedOrder.data}, status=status.HTTP_200_CREATED)
         else:
-            return Response({'message':'An error has happened while doing data validation', 'errors':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, order_id):
         order = self.get_object(order_id, request.user)
@@ -69,7 +69,7 @@ class OrderAssign(APIView):
         bidders = OrderBid.objects.filter(order=order)
         bidders, count = GenericUtils.paginator(bidders, request.QUERY_PARAMS.get('page'))
         serializedItems = OrderBidSerializer(bidders, many=True)
-        return Response({'bidders':serializedItems.data, 'count':count})
+        return Response({'bid':serializedItems.data, 'count':count})
 
 
     def post(self, request, order_id, format=None):
@@ -77,7 +77,7 @@ class OrderAssign(APIView):
         try:
             request.data['assigned_to']
         except:
-            return Response({'message':'Please assign to a vendor'}, status=status.HTTP_400_BAD_REQUEST)    
+            return Response({'error':{'assigned_to':['Please assign to a vendor']}}, status=status.HTTP_400_BAD_REQUEST)    
 
         serializedOrder = OrderAssignSerializer(order, data=request.data)
         if serializedOrder.is_valid():
@@ -86,5 +86,5 @@ class OrderAssign(APIView):
             return Response({'message':message})
 
         else:
-            return Response({'message':'Failed to assign vendor','errors':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)    
+            return Response({'error':serializedOrder.errors}, status=status.HTTP_400_BAD_REQUEST)    
 

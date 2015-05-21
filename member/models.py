@@ -32,7 +32,7 @@ class Member(AbstractUser):
     country     = models.ForeignKey('location.Country', blank=True, null=True)
     is_vendor   = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
-    credit      = models.IntegerField(default=0)
+    credit      = models.DecimalField(max_digits=8, decimal_places=2, default=0)
 
     referral    = models.ForeignKey('member.MemberReferral', blank=True, null=True, related_name='referred_by_member')
 

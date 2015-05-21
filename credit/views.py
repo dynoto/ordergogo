@@ -28,7 +28,7 @@ class TransactionViewSet(viewsets.ViewSet):
         """
         queryset = Transaction.objects.filter(member=request.user)
         serializer = TransactionReadSerializer(queryset, exclude=['member'] , many=True)
-        return Response(serializer.data)
+        return Response({'transaction':serializer.data})
 
     def retrieve(self, request, transaction_id):
         """
@@ -38,7 +38,7 @@ class TransactionViewSet(viewsets.ViewSet):
         """
         queryset = get_object_or_404(Transaction, id=transaction_id, member=request.user)
         serializer = TransactionReadSerializer(queryset, exclude=['member'])
-        return Response(serializer.data)
+        return Response({'transaction':serializer.data})
 
     @list_route(methods=['post'])
     def create_paypal(self, request):
@@ -57,14 +57,25 @@ class TransactionViewSet(viewsets.ViewSet):
             try:
                 pp = paypalrestsdk.Payment.find(request.data['transaction_id'])
             except:
-                return Response({'errors':'No such paypal transaction id'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error':{'transaction_id':['We cannot find your paypal transaction, please verify that the transaction_id is correct']}}, status=status.HTTP_400_BAD_REQUEST)
 
+            # IF NOT APPROVED THROW USER ERROR
             if pp['state'] != 'approved':
-                return Response({'errors':'Payment is not approved, please check'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error':{'transaction_id':['Payment is not approved, please check your transaction_id and try again']}}, status=status.HTTP_400_BAD_REQUEST)
 
+            # IF THE VALUE OF THE TRANSACTION DOES NOT MATCH PACKAGE, THROW USER ERROR
+            elif pp['transactions'][0]['amount']['total'] != str(package.price):
+                return Response({'error':{'transaction_id':['Payment total for this transaction does not match the package price']}}, status=status.HTTP_400_BAD_REQUEST)
+
+
+            # ADD CREDITS TO THE USER
+            request.user.credit += package.credit
+            request.user.save()
+
+            # SAVE TRANSACTION AND RETURN DATA
             serializedTransaction.save(member=request.user, amount=package.price, is_paypal=True)
-            return Response(serializedTransaction.data, status=status.HTTP_201_CREATED)
-        return Response({'errors':serializedTransaction.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'transaction':serializedTransaction.data}, status=status.HTTP_201_CREATED)
+        return Response({'error':serializedTransaction.errors}, status=status.HTTP_403_BAD_REQUEST)
 
 
 # Create your views here.

@@ -6,9 +6,9 @@ from credit.models import Package, Transaction
 
 @admin.register(Package)
 class PackageAdmin(admin.ModelAdmin):
-    list_display = ('title','description','price','credits')
+    list_display = ('id','title','description','price','credit')
 
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('package','member','amount','transaction_id')
+    list_display = ('id','package','member','amount','transaction_id','is_paypal','is_apple','is_google')

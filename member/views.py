@@ -30,7 +30,7 @@ class Register(APIView):
         serializedMember = MemberRegisterSerializer(data=request.data)
         if serializedMember.is_valid():
             if request.data['password'] != request.data['password2']:
-                return Response({"password":["The field password and password2 does not match"]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error':{"password":["The field password and password2 does not match"]}}, status=status.HTTP_400_BAD_REQUEST)
 
             # CREATE USER FIRST
             member = Member.objects.create_user(
@@ -56,7 +56,7 @@ class Register(APIView):
 
             return Response({'token':token.key, 'user':serializedMember.data, 'message':'Register successful'}, status=status.HTTP_201_CREATED)
 
-        return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':serializedMember.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Login(ObtainAuthToken):
@@ -76,7 +76,7 @@ class Login(ObtainAuthToken):
         user = serializer.validated_data['user']
 
         if not user.is_verified:
-            return Response({'message':'User not yet verified'},status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':{'username':['User not yet verified']}},status=status.HTTP_400_BAD_REQUEST)
 
         serializedMember = MemberSerializer(user)
         token, created = Token.objects.get_or_create(user=user)
@@ -105,7 +105,7 @@ class Verify(APIView):
         vrf = self.get_object(request.user)
         grace_period = datetime.now(pytz.utc) - vrf.updated_at
         if grace_period.seconds < 300:
-            return Response({'message':'You have just request for verification code, please wait for 5 minutes before trying again'})
+            return Response({'error':{'code':['You have just request for verification code, please wait for 5 minutes before trying again']}}, status=status.HTTP_400_BAD_REQUEST)
 
 
         vrf.code = randrange(100000,999999)
@@ -114,7 +114,7 @@ class Verify(APIView):
             vrf.save()
             return Response({'message':'Verification code has been resend, please check your mobile phone for SMS'})
         else:
-            return Response({'message':'Something wrong when sending verification code to your number, please check if the phone number is correct and exist'})
+            return Response({'error':{'code':['Something wrong when sending verification code to your number, please check if the phone number is correct and exist']}})
 
 
 
@@ -160,7 +160,7 @@ class MemberDetail(APIView):
         if serializedMember.is_valid():
             serializedMember.save()
             return Response({'user':serializedMember.data})
-        return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':serializedMember.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MemberPhotoList(APIView):
@@ -174,7 +174,7 @@ class MemberPhotoList(APIView):
         if serializedMember.is_valid():
             serializedMember.save()
             return Response({'user':serializedMember.data}, status=status.HTTP_200_CREATED)
-        return Response(serializedMember.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':serializedMember.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MemberCategoryList(APIView):
@@ -187,7 +187,7 @@ class MemberCategoryList(APIView):
         categories = MemberCategory.objects.filter(member=request.user)
         serializedMemberCategory = MemberCategorySerializer(categories, many=True)
 
-        return Response({'categories':serializedMemberCategory.data})
+        return Response({'category':serializedMemberCategory.data})
 
 
 class MemberCategoryDetail(APIView):
@@ -201,9 +201,9 @@ class MemberCategoryDetail(APIView):
         try:
             MemberCategory.objects.create(category_id=mc_id, member=request.user)
         except ValueError:
-            return Response({'error':'No such category'})
+            return Response({'error':{'category_id':['No such category']}}, status=status.HTTP_400_FORBIDDEN)
         except IntegrityError:
-            return Response({'error':'Category already been associated with member'})
+            return Response({'error':{'category_id':['Category already been associated with member']}}, status=status.HTTP_400_FORBIDDEN)
         
         return Response({'message':'Category has been added to the member'})
 
@@ -252,6 +252,6 @@ class MemberReferralDetail(APIView):
         if serializedRef.is_valid():
             serializedRef.save()
             return Response({'referral':serializedRef.data,'message':'Referral code successfully created'})
-        return Response(serializedRef.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':serializedRef.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 

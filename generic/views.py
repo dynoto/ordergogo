@@ -44,7 +44,7 @@ class GenericDetails(APIView):
     def get(self, request, model_id, format=None):
         modelObject = self.get_object(request.user, model_id)
         serializedModelInstance = self.ModelSerializer(modelObject)
-        return Response(serializedModelInstance.data)
+        return Response({self.Model._meta.verbose_name_plural.title():serializedModelInstance.data})
 
 
     def delete(self, request, model_id, format=None):

@@ -5,7 +5,7 @@ from credit.models import Package, Transaction
 class PackageSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Package
-        fields = ('id','title','description','price','credits')
+        fields = ('id','title','description','price','credit')
 
 class TransactionSerializer(DynamicFieldsModelSerializer):
 
